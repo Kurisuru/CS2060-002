@@ -10,7 +10,7 @@ int main(void)
 {
    // srand( time( 0 ) ); // seed random number generator
     //update with your name
-    puts("Hello Name");
+    puts("Hello Chris");
    guessGame();
 
 } // end main
