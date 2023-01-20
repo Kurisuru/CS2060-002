@@ -10,10 +10,10 @@
 #include <time.h>
 #include <stdbool.h>
 
-// 
+// sets a variable for the minimum number
 #define MIN_NUMBER 1
 
-//
+// sets a constant variable for the maximum number 
 const int MAX_NUMBER = 100;
 
 //
@@ -24,7 +24,7 @@ bool isCorrect(int, int);
 int main(void)
 {
     //
-   srand(time(0));
+   //srand(time(0));
 
    //
    guessGame(); 
