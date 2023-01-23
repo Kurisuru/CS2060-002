@@ -23,13 +23,13 @@ bool isCorrect(int, int);
 
 int main(void)
 {
-    //
+    // initializes random number generator
    //srand(time(0));
 
-   //
+   // starts guessing game
    guessGame(); 
 
-   //
+   //ends function
    return 0;
 }
 
@@ -76,7 +76,7 @@ bool isCorrect(int g, int a)
     // initialize boolean to determine if guess is correct
     bool found = false;
 
-    // determine if guess is correct, too high, or too low. 
+    // determine if guess is correct, too low, or too high. 
     if (g == a){
         found = true;
     }else  if (g < a)
@@ -84,7 +84,7 @@ bool isCorrect(int g, int a)
    else
       printf( "%s", "Too high. Try again.\n? " );
 
-    // return 
+    // return whether guess is correct or incorrect
    return found;
 } 
 
