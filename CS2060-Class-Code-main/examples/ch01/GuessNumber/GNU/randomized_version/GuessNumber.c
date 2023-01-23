@@ -4,7 +4,7 @@
 */
 
 
-// 
+// allows use of these library functions in this program
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -24,7 +24,7 @@ bool isCorrect(int, int);
 int main(void)
 {
     // initializes random number generator
-   //srand(time(0));
+   srand(time(0));
 
    // starts guessing game
    guessGame(); 
