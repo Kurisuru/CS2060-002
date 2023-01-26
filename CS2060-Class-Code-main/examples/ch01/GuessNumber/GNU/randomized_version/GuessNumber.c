@@ -24,7 +24,7 @@ bool isCorrect(int, int);
 int main(void)
 {
     // initializes random number generator
-   srand(time(0));
+   //srand(time(0));
 
    // starts guessing game
    guessGame(); 
