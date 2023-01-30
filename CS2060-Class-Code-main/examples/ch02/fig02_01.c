@@ -8,13 +8,16 @@ int main( void )
 	int length = 0;
 	int width = 0;
 	int area = 0;
-
-	printf("%s", "Enter the length");
+	double average = 0;
+	
+	printf("%s\n", "Enter the length");
 	scanf("%i",&length);
 
-	printf("%s", "Enter the width");
+	printf("%s\n", "Enter the width");
 	scanf("%i", &width);
 
+	average = ((double)length + (double)width) / 2
+	printf("%s %.1f\n","Average:", average);
 	area = length * width;
 	printf("%s%i %s%i %s%i", "Length: ", length, "width: ", width, "and area is ", area);
    //printf("%s\n", "Welcome to C!" );
