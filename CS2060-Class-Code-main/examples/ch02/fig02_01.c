@@ -11,6 +11,7 @@ int main( void )
 
 	printf("%s", "Enter the length");
 	scanf("%i",&length);
+
 	printf("%s", "Enter the width");
 	scanf("%i", &width);
 
