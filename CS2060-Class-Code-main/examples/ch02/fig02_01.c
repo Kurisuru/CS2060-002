@@ -5,7 +5,20 @@
 // function main begins program execution 
 int main( void )
 {
-   printf( "Welcome to C!\n" );
+	int length = 0;
+	int width = 0;
+	int area = 0;
+
+	printf("%s", "Enter the length");
+	scanf("%i",&length);
+	printf("%s", "Enter the width");
+	scanf("%i", &width);
+
+	area = length * width;
+	printf("%s%i %s%i %s%i", "Length: ", length, "width: ", width, "and area is ", area);
+   //printf("%s\n", "Welcome to C!" );
+
+	return 0;
 } // end function main 
 
 
