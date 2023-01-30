@@ -16,7 +16,7 @@ int main( void )
 	printf("%s\n", "Enter the width");
 	scanf("%i", &width);
 
-	average = ((double)length + (double)width) / 2
+	average = ((double)length + (double)width) / 2;
 	printf("%s %.1f\n","Average:", average);
 	area = length * width;
 	printf("%s%i %s%i %s%i", "Length: ", length, "width: ", width, "and area is ", area);
