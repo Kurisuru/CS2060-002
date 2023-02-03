@@ -1,6 +1,7 @@
 // Fig. 3.10: fig03_10.c
 // Analysis of examination results 
 #include <stdio.h>
+#include <stdbool.h>
 
 // function main begins program execution 
 int main( void )
@@ -10,23 +11,31 @@ int main( void )
    unsigned int failures = 0; // number of failures 
    unsigned int student = 1; // student counter    
    int result; // one exam result 
+   bool goodInput = false;
 
    // process 10 students using counter-controlled loop 
    while ( student <= 10 ) {
 
       // prompt user for input and obtain value from user 
+      do {
       printf( "%s", "Enter result ( 1=pass,2=fail ): " );
-      scanf( "%d", &result );
-
-      // if result 1, increment passes 
-      if ( result == 1 ) {     
-         passes = passes + 1;
-      } // end if 
-      else { // otherwise, increment failures 
-         failures = failures + 1;
-      } // end else 
-
-      student = student + 1; // increment student counter  
+      //scanf( "%d", &result );
+          // if result 1, increment passes 
+          if (scanf("%d", &result) == 1) {
+              if (result == 1) {
+                  passes = passes + 1;
+                  goodInput = true;
+              } // end if 
+              else { // otherwise, increment failures 
+                  failures = failures + 1;
+                  goodInput = true;
+              } // end else 
+              student = student + 1; // increment student counter  
+          }
+          else {
+              puts("Error, number outside of valid range");
+          }
+      } while (goodInput != true);
    } // end while 
 
    // termination phase; display number of passes and failures 
