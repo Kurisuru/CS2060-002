@@ -12,16 +12,18 @@ int main( void )
    unsigned int student = 1; // student counter    
    int result; // one exam result 
    bool goodInput = false;
+   int scanInput = 0;
 
    // process 10 students using counter-controlled loop 
    while ( student <= 10 ) {
 
       // prompt user for input and obtain value from user 
       do {
+      while (getchar() != "\n") {
       printf( "%s", "Enter result ( 1=pass,2=fail ): " );
-      //scanf( "%d", &result );
+      scanInput = scanf( "%d", &result );
           // if result 1, increment passes 
-          if (scanf("%d", &result) == 1) {
+          if (scanInput == 1) {
               if (result == 1) {
                   passes = passes + 1;
                   goodInput = true;
@@ -35,6 +37,7 @@ int main( void )
           else {
               puts("Error, number outside of valid range");
           }
+      }
       } while (goodInput != true);
    } // end while 
 
