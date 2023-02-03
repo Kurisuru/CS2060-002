@@ -23,7 +23,7 @@ int main( void )
       printf( "%s", "Enter result ( 1=pass,2=fail ): " );
       scanInput = scanf( "%d", &result );
           // if result 1, increment passes 
-          if (scanInput == 1) {
+          if (scanInput == 1&&(result==1||result ==2) ) {
               if (result == 1) {
                   passes = passes + 1;
                   goodInput = true;
