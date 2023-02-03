@@ -23,7 +23,9 @@ int main( void )
 	printf("%s %.1f\n","Average:", average);
 	area = length * width;
 	printf("%s%i %s%i %s%i", "Length: ", length, "width: ", width, "and area is ", area);
-
+	
+	
+	
 	return 0;
 } // end function main 
 
