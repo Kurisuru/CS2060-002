@@ -34,6 +34,7 @@ int main(void)
         }
     } while (hours != SENTINEL_VAL);
     displaySummary(sumHours, sumCars, sumCharges);
+    return 0;
 }
 
 double getValidHours()
@@ -43,8 +44,7 @@ double getValidHours()
 	bool isValid = false;
     do
     {
-        do
-        {
+        while ((getchar()) != '\n');
             printf("%s\n", "Enter the number of hours the car was parked or enter -1 to quit.");
             scanReturn = scanf("%lf", &hours);
             if (scanReturn == 1)
@@ -56,7 +56,6 @@ double getValidHours()
             }
             else
                 puts("You did not enter a number");
-        } while ((getchar()) != '\n');
     } while (!isValid);
 	return hours;
 }
