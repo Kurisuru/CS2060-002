@@ -12,14 +12,28 @@
 
 double getValidHours();
 double calculateCharge(double);
-void displaySummary(int, int);
+void displaySummary(double, int, double);
 
 int main(void)
 {
+    double hours = 0;
+    double charge = 0;
 	double sumCharges = 0;
-	double totalHours = 0;
-	int totalCars = 0;
-    totalHours = getValidHours();
+	double sumHours = 0;
+	int sumCars = 0;
+    do
+    {
+        hours = getValidHours();
+        if (hours != SENTINEL_VAL)
+        {
+            sumHours += hours;
+            charge = calculateCharge(hours);
+            sumCharges += charge;
+            sumCars++;
+            printf("%s\n%d\t%.1lf\t%.2lf\n", "Car\tHours\tCharge", sumCars, hours, charge);
+        }
+    } while (hours != SENTINEL_VAL);
+    displaySummary(sumHours, sumCars, sumCharges);
 }
 
 double getValidHours()
@@ -27,20 +41,21 @@ double getValidHours()
 	double hours = 0;
     int scanReturn = 0;
 	bool isValid = false;
+    int buffer = 0;
     do
     {
-        if (getchar() != "\n") 
+        do
         {
-        }
             printf("%s\n", "Enter the number of hours the car was parked or enter -1 to quit.");
             scanReturn = scanf("%lf", &hours);
             if (scanReturn == 1)
             {
-                if (hours > MIN_HOURS_ALLOWED && hours <= MAXIMUM_HOURS_ALLOWED)
+                if ((hours > MIN_HOURS_ALLOWED && hours <= MAXIMUM_HOURS_ALLOWED) || hours == SENTINEL_VAL)
                     isValid = true;
-                else if (hours == SENTINEL_VAL)
-                    isValid = false;
             }
+            else
+                puts("You did not enter a number");
+        } while ((getchar()) != '\n');
     } while (!isValid);
 	return hours;
 }
@@ -52,11 +67,14 @@ double calculateCharge(double calcHours)
         charge = MIN_CHARGE_VAL;
     else
         charge = (ceil(calcHours) - MIN_CHARGE_HOURS) * ADDITIONAL_HOURS_RATE + MIN_CHARGE_VAL;
+    if (charge >= MAX_CHARGE_VAL)
+        charge = MAX_CHARGE_VAL;
     return charge;
 }
-void displaySummary(int totalHours, int totalCars) 
+void displaySummary(double totalHours, int totalCars, double totalCharges) 
 {
-
+    puts("Parking Garage Summary\n");
+    printf("%s\n%d\t\t%.1lf\t\t%.2lf","Total Cars\tTotal Hours\tTotal Charges", totalCars, totalHours, totalCharges);
 }
 /*#include <stdio.h>
 #include <stdlib.h>
