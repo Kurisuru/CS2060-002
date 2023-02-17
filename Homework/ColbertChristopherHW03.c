@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
-#define MIN_CHARGE_VAL 2
-#define MIN_CHARGE_HOURS 3
+#define MIN_CHARGE_VAL 3
+#define MIN_HOURS_AT_FLAT_RATE 3
 #define MIN_HOURS_ALLOWED 0
-#define MAX_CHARGE_VAL 10
+#define MAX_CHARGE_VAL 12
 #define MAXIMUM_HOURS_ALLOWED 24
 #define ADDITIONAL_HOURS_RATE 0.75
 #define SENTINEL_VAL -1
@@ -41,7 +41,6 @@ double getValidHours()
 	double hours = 0;
     int scanReturn = 0;
 	bool isValid = false;
-    int buffer = 0;
     do
     {
         do
@@ -52,6 +51,8 @@ double getValidHours()
             {
                 if ((hours > MIN_HOURS_ALLOWED && hours <= MAXIMUM_HOURS_ALLOWED) || hours == SENTINEL_VAL)
                     isValid = true;
+                else
+                    puts("Your number must be between 0 and 24 hours");
             }
             else
                 puts("You did not enter a number");
@@ -63,18 +64,21 @@ double getValidHours()
 double calculateCharge(double calcHours) 
 {
     double charge = 0;
-    if (calcHours < MIN_CHARGE_HOURS)
+    if (calcHours < MIN_HOURS_AT_FLAT_RATE)
         charge = MIN_CHARGE_VAL;
     else
-        charge = (ceil(calcHours) - MIN_CHARGE_HOURS) * ADDITIONAL_HOURS_RATE + MIN_CHARGE_VAL;
+        charge = (ceil(calcHours) - MIN_HOURS_AT_FLAT_RATE) * ADDITIONAL_HOURS_RATE + MIN_CHARGE_VAL;
     if (charge >= MAX_CHARGE_VAL)
         charge = MAX_CHARGE_VAL;
     return charge;
 }
-void displaySummary(double totalHours, int totalCars, double totalCharges) 
+void displaySummary(double totalHours, int totalCars, double totalCharges)
 {
-    puts("Parking Garage Summary\n");
-    printf("%s\n%d\t\t%.1lf\t\t%.2lf","Total Cars\tTotal Hours\tTotal Charges", totalCars, totalHours, totalCharges);
+        puts("Parking Garage Summary");
+    if (totalCars > 0)
+        printf("%s\n%d\t\t%.1lf\t\t%.2lf", "Total Cars\tTotal Hours\tTotal Charges", totalCars, totalHours, totalCharges);
+    else
+        puts("There were no cars parked today");
 }
 /*#include <stdio.h>
 #include <stdlib.h>
