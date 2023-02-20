@@ -9,6 +9,7 @@ int minimum(const int grades[][EXAMS], size_t pupils, size_t tests);
 int maximum(const int grades[][EXAMS], size_t pupils, size_t tests);
 double average(const int setOfGrades[], size_t tests);
 void printArray(const int grades[][EXAMS], size_t pupils, size_t tests);
+void addGrades(int grades[][EXAMS], size_t pupils, size_t tests);
 
 // function main begins program execution
 int main(void)
@@ -33,6 +34,19 @@ int main(void)
       printf("The average grade for student %u is %.2f\n", 
          student, average(studentGrades[student], EXAMS));
    } 
+   addGrades(studentGrades, STUDENTS, EXAMS);
+}
+
+void addGrades(int grades[][EXAMS], size_t pupils, size_t tests)
+{
+    for (size_t i = 0; i < pupils; ++i) {
+
+        for (size_t j = 0; j < tests; ++j) {
+            printf("Enter grades for student at grades[%d][%d]", i, j);
+            scanf("%d", &grades[i][j]);
+            
+        }
+    }
 }
 
 // Find the minimum grade
