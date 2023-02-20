@@ -5,7 +5,8 @@
 
 // function prototypes
 void modifyArray(int b[], size_t size);
-void modifyElement(int e);               
+void modifyElement(int e);         
+void printArrayElements(const int c[], size_t size);
 
 // function main begins program execution
 int main(void)
@@ -38,6 +39,17 @@ int main(void)
 
    // output value of a[3]
    printf("The value of a[3] is %d\n", a[3]);
+
+   printf("The value of the array name is %p\nThe value of the element stored in a[0] is %p\n", a, &a[0]);
+
+   printArrayElements(a, SIZE);
+}
+
+void printArrayElements(const int c[], size_t size)
+{
+    for (size_t i = 0; i < size; i++) {
+        printf("%d\n", c[i]);
+    }
 }
 
 // in function modifyArray, "b" points to the original array "a" 
