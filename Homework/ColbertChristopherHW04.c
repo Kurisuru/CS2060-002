@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <cstdbool>
+#include <stdbool.h>
 
 #define STUDENTS 4
 #define GRADE_CATEGORIES 5
@@ -33,7 +33,6 @@ void printStatements()
 
 void enterGrades(double grades[][GRADE_CATEGORIES])
 {
-    int scanReturn = 0;
     for (int row = 0; row < STUDENTS; row++) {
         for (int col = 0; col < GRADE_CATEGORIES; col++) {
             printf("Enter the grade for student %d for category %d", row, col);
