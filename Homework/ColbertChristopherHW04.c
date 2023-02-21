@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cstdbool>
 
 #define STUDENTS 4
 #define GRADE_CATEGORIES 5
@@ -7,6 +8,7 @@ const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
 
 void printStatements();
 void enterGrades(double grades[][GRADE_CATEGORIES]);
+void getValidInput();
 
 int main(void)
 {
@@ -25,11 +27,26 @@ void printStatements()
 
     puts("The correct order to enter grades for each student is: ");
     puts(CATEGORIES);
+    puts("");
 
 }
 
 void enterGrades(double grades[][GRADE_CATEGORIES])
 {
-
+    int scanReturn = 0;
+    for (int row = 0; row < STUDENTS; row++) {
+        for (int col = 0; col < GRADE_CATEGORIES; col++) {
+            printf("Enter the grade for student %d for category %d", row, col);
+            getValidInput();
+        }
+    }
 }
 
+void getValidInput()
+{
+    bool isValid = false;
+    do
+    {
+
+    } while (!isValid);
+}
