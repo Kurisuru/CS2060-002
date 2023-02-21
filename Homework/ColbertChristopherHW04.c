@@ -5,15 +5,18 @@
 #define GRADE_CATEGORIES 5
 #define CATEGORIES "1. Learning Activity 2. Homework 3. Project 4. Midterm 5. Final "
 const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
+#define GRADE_MAX 100
+#define GRADE_MIN 0
 
 void printStatements();
-void enterGrades(double grades[][GRADE_CATEGORIES]);
-void getValidInput();
+void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+int getValidGrade();
 
 int main(void)
 {
+    int grades[STUDENTS][GRADE_CATEGORIES];
     printStatements();
-
+    enterGrades(grades[STUDENTS][GRADE_CATEGORIES], STUDENTS, GRADE_CATEGORIES);
 }
 
 void printStatements()
@@ -31,21 +34,34 @@ void printStatements()
 
 }
 
-void enterGrades(double grades[][GRADE_CATEGORIES])
+void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
 {
-    for (int row = 0; row < STUDENTS; row++) {
-        for (int col = 0; col < GRADE_CATEGORIES; col++) {
-            printf("Enter the grade for student %d for category %d", row, col);
-            getValidInput();
+    for (size_t row = 0; row < STUDENTS; row++) {
+        for (size_t col = 0; col < GRADE_CATEGORIES; col++) {
+            printf("Enter the grade for student %llu for category %llu", row, col);
+            grades[row][col] = getValidGrade();
         }
     }
 }
 
-void getValidInput()
+int getValidGrade()
 {
+    int grade = 0;
+    int scanReturn = 0;
     bool isValid = false;
     do
     {
-
+        while ((getchar()) != '\n');
+        scanReturn = scanf("%d", &grade);
+        if (scanReturn == 1)
+        {
+            if (grade > GRADE_MIN && grade < GRADE_MAX) 
+            {
+                isValid = true;
+            }
+        }
+        else
+            puts("You entered an invalid grade, try again");
     } while (!isValid);
+    return grade;
 }
