@@ -1,5 +1,10 @@
 #include <stdio.h>
 
+#define STUDENTS 4
+#define GRADE_CATEGORIES 5
+#define CATEGORIES "1. Learning Activity 2. Homework 3. Project 4. Midterm 5. Final "
+const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
+
 int main(void)
 {
 
