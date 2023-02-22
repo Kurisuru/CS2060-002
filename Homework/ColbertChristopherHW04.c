@@ -11,12 +11,14 @@ const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
 void printStatements();
 void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 int getValidGrade();
+void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 
 int main(void)
 {
     int grades[STUDENTS][GRADE_CATEGORIES];
     printStatements();
-    enterGrades(grades[STUDENTS][GRADE_CATEGORIES], STUDENTS, GRADE_CATEGORIES);
+    enterGrades(grades, STUDENTS, GRADE_CATEGORIES);
+    printGrades(grades, STUDENTS, GRADE_CATEGORIES);
 }
 
 void printStatements()
@@ -37,8 +39,9 @@ void printStatements()
 void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
 {
     for (size_t row = 0; row < STUDENTS; row++) {
+        puts("");
         for (size_t col = 0; col < GRADE_CATEGORIES; col++) {
-            printf("Enter the grade for student %llu for category %llu", row, col);
+            printf("Enter the grade for student %llu for category %llu: ", row+1, col+1);
             grades[row][col] = getValidGrade();
         }
     }
@@ -51,17 +54,42 @@ int getValidGrade()
     bool isValid = false;
     do
     {
-        while ((getchar()) != '\n');
+        
         scanReturn = scanf("%d", &grade);
         if (scanReturn == 1)
         {
-            if (grade > GRADE_MIN && grade < GRADE_MAX) 
+            if (grade > GRADE_MIN && grade < GRADE_MAX)
             {
                 isValid = true;
             }
+            else
+                puts("invalid");
         }
         else
             puts("You entered an invalid grade, try again");
+        while ((getchar()) != '\n');
     } while (!isValid);
     return grade;
+}
+
+void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
+{
+    for (size_t rows = 0; rows < STUDENTS; rows++) {
+        puts("");
+        printf("Student %llu: ", rows + 1);
+        for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
+            printf("%d\t", grades[rows][cols]);
+        }
+    }
+}
+
+void calculateGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
+{
+    for (size_t rows = 0; rows < STUDENTS; rows++) {
+        puts("");
+        printf("Student %llu: ", rows + 1);
+        for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
+            printf("%d\t", grades[rows][cols]);
+        }
+    }
 }
