@@ -12,28 +12,32 @@ void printStatements();
 void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 int getValidGrade();
 void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
-void calculateGrades(int finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+void printFinalGrades(double finalStudentGrades[]);
+double calculateClassAverage(double finalStudentGrades[], int students);
 
 int main(void)
 {
     int grades[STUDENTS][GRADE_CATEGORIES] = { 0 };
-    int finalStudentGrades[STUDENTS] = { 0 };
+    double finalStudentGrades[STUDENTS] = { 0 };
     printStatements();
     enterGrades(grades, STUDENTS, GRADE_CATEGORIES);
     printGrades(grades, STUDENTS, GRADE_CATEGORIES);
     calculateGrades(finalStudentGrades, grades, STUDENTS, GRADE_CATEGORIES);
+    printFinalGrades(finalStudentGrades);
+    calculateClassAverage(finalStudentGrades, STUDENTS);
 }
 
 void printStatements()
 {
     puts("This program will calculate the grades for these categories");
     puts(CATEGORIES);
-    puts("The weights for these categories are");
+    puts("\nThe weights for these categories are");
     for(int i = 0; i < GRADE_CATEGORIES; i++) {
         printf("Category %d weight is %.2f\n", i+1, GRADE_CATEGORY_WEIGHT[i]);
     }
 
-    puts("The correct order to enter grades for each student is: ");
+    puts("\nThe correct order to enter grades for each student is: ");
     puts(CATEGORIES);
     puts("");
 
@@ -77,6 +81,7 @@ int getValidGrade()
 
 void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
+    puts("Grades entered for each student");
     for (size_t rows = 0; rows < STUDENTS; rows++) {
         puts("");
         printf("Student %llu: ", rows + 1);
@@ -86,18 +91,53 @@ void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exa
     }
 }
 
-void calculateGrades(int finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
+void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
     for (size_t rows = 0; rows < STUDENTS; rows++) {
-        puts("");
-        printf("Student %llu: ", rows + 1);
         double finalGrade = 0;
         //calculate weighted category grade for student by multiplying the category grades and the weight and then add it to the final grade
         for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
-            finalGrade =+ grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
-            printf("%lf", finalGrade);
+            finalGrade = finalGrade + grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
         }
         //save final Grade to student
         finalStudentGrades[rows] = finalGrade;
+       
     }
+}
+
+void printFinalGrades(double finalStudentGrades[])
+{
+    puts("\nFinal grades for students");
+    for (size_t i = 0; i < STUDENTS; i++)
+    {
+        puts("");
+        printf("Student %llu: ", i + 1);
+        printf("%.2lf", finalStudentGrades[i]);
+        if (finalStudentGrades[i] >= 90 && finalStudentGrades[i] < 100)
+        {
+            printf(" %c", 'A');
+        }
+        else if (finalStudentGrades[i] >= 80 && finalStudentGrades[i] < 90)
+        {
+            printf(" %c", 'B');
+        }
+        else if (finalStudentGrades[i] >= 70 && finalStudentGrades[i] < 80)
+        {
+            printf(" %c", 'C');
+        }
+        else if (finalStudentGrades[i] >= 60 && finalStudentGrades[i] < 70)
+        {
+            printf(" %c", 'D');
+        }
+        else if (finalStudentGrades[i] < 60)
+        {
+            printf(" %c", 'F');
+        }
+    }
+}
+
+double calculateClassAverage(double finalStudentGrades[], int students)
+{
+    double classAverage = 0;
+
 }
