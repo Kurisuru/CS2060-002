@@ -25,7 +25,7 @@ int main(void)
     printGrades(grades, STUDENTS, GRADE_CATEGORIES);
     calculateGrades(finalStudentGrades, grades, STUDENTS, GRADE_CATEGORIES);
     printFinalGrades(finalStudentGrades);
-    calculateClassAverage(finalStudentGrades, STUDENTS);
+    printf("\nClass average is %.2lf", calculateClassAverage(finalStudentGrades, STUDENTS));
 }
 
 void printStatements()
@@ -139,5 +139,10 @@ void printFinalGrades(double finalStudentGrades[])
 double calculateClassAverage(double finalStudentGrades[], int students)
 {
     double classAverage = 0;
-
+    for (int i = 0; i < students; i++)
+    {
+        classAverage = classAverage + finalStudentGrades[i];
+    }
+    classAverage = classAverage / students;
+    return classAverage;
 }
