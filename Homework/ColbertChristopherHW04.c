@@ -85,11 +85,13 @@ void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exa
 
 void calculateGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
+    double finalGrade = 0;
     for (size_t rows = 0; rows < STUDENTS; rows++) {
         puts("");
         printf("Student %llu: ", rows + 1);
         for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
-            printf("%d\t", grades[rows][cols]);
+            finalGrade =+ grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
+            printf("%lf", finalGrade);
         }
     }
 }
