@@ -12,13 +12,16 @@ void printStatements();
 void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 int getValidGrade();
 void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+void calculateGrades(int finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 
 int main(void)
 {
-    int grades[STUDENTS][GRADE_CATEGORIES];
+    int grades[STUDENTS][GRADE_CATEGORIES] = { 0 };
+    int finalStudentGrades[STUDENTS] = { 0 };
     printStatements();
     enterGrades(grades, STUDENTS, GRADE_CATEGORIES);
     printGrades(grades, STUDENTS, GRADE_CATEGORIES);
+    calculateGrades(finalStudentGrades, grades, STUDENTS, GRADE_CATEGORIES);
 }
 
 void printStatements()
@@ -38,9 +41,9 @@ void printStatements()
 
 void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
 {
-    for (size_t row = 0; row < STUDENTS; row++) {
+    for (size_t row = 0; row < pupils; row++) {
         puts("");
-        for (size_t col = 0; col < GRADE_CATEGORIES; col++) {
+        for (size_t col = 0; col < exams; col++) {
             printf("Enter the grade for student %llu for category %llu: ", row+1, col+1);
             grades[row][col] = getValidGrade();
         }
@@ -83,15 +86,18 @@ void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exa
     }
 }
 
-void calculateGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
+void calculateGrades(int finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
-    double finalGrade = 0;
     for (size_t rows = 0; rows < STUDENTS; rows++) {
         puts("");
         printf("Student %llu: ", rows + 1);
+        double finalGrade = 0;
+        //calculate weighted category grade for student by multiplying the category grades and the weight and then add it to the final grade
         for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
             finalGrade =+ grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
             printf("%lf", finalGrade);
         }
+        //save final Grade to student
+        finalStudentGrades[rows] = finalGrade;
     }
 }
