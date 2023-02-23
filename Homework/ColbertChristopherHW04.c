@@ -8,13 +8,13 @@ const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
 #define GRADE_MAX 100
 #define GRADE_MIN 0
 
-void printStatements();
 void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
 int getValidGrade();
-void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+void printStatements();
+void printGrades(const int GRADES[][GRADE_CATEGORIES], size_t pupils, size_t exams);
+void printFinalGrades(const double finalStudentGrades[]);
 void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
-void printFinalGrades(double finalStudentGrades[]);
-double calculateClassAverage(double finalStudentGrades[], int students);
+double calculateClassAverage(double FINAL_STUDENT_GRADES[], int students);
 
 int main(void)
 {
@@ -28,6 +28,7 @@ int main(void)
     printf("\nClass average is %.2lf", calculateClassAverage(finalStudentGrades, STUDENTS));
 }
 
+//prints categories for each student, and tells user the order to enter the grades
 void printStatements()
 {
     puts("This program will calculate the grades for these categories");
@@ -43,6 +44,7 @@ void printStatements()
 
 }
 
+//enter grades into 2d grade array
 void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
 {
     for (size_t row = 0; row < pupils; row++) {
@@ -54,6 +56,7 @@ void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
     }
 }
 
+//validate that grade entered is an integer number between 0 and 100
 int getValidGrade()
 {
     int grade = 0;
@@ -79,18 +82,20 @@ int getValidGrade()
     return grade;
 }
 
-void printGrades(const int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
+//print grades from each category, for each student
+void printGrades(const int GRADES[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
     puts("Grades entered for each student");
     for (size_t rows = 0; rows < STUDENTS; rows++) {
         puts("");
         printf("Student %llu: ", rows + 1);
         for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
-            printf("%d\t", grades[rows][cols]);
+            printf("%d\t", GRADES[rows][cols]);
         }
     }
 }
 
+//calculate the final grade of each student using the grade category weights
 void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams)
 {
     for (size_t rows = 0; rows < STUDENTS; rows++) {
@@ -105,37 +110,39 @@ void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES]
     }
 }
 
-void printFinalGrades(double finalStudentGrades[])
+//prints final weighted grades for each student, and the corresponding letter grade
+void printFinalGrades(const double FINAL_STUDENT_GRADES[])
 {
     puts("\nFinal grades for students");
     for (size_t i = 0; i < STUDENTS; i++)
     {
         puts("");
         printf("Student %llu: ", i + 1);
-        printf("%.2lf", finalStudentGrades[i]);
-        if (finalStudentGrades[i] >= 90 && finalStudentGrades[i] < 100)
+        printf("%.2lf", FINAL_STUDENT_GRADES[i]);
+        if (FINAL_STUDENT_GRADES[i] >= 90 && FINAL_STUDENT_GRADES[i] < 100)
         {
             printf(" %c", 'A');
         }
-        else if (finalStudentGrades[i] >= 80 && finalStudentGrades[i] < 90)
+        else if (FINAL_STUDENT_GRADES[i] >= 80 && FINAL_STUDENT_GRADES[i] < 90)
         {
             printf(" %c", 'B');
         }
-        else if (finalStudentGrades[i] >= 70 && finalStudentGrades[i] < 80)
+        else if (FINAL_STUDENT_GRADES[i] >= 70 && FINAL_STUDENT_GRADES[i] < 80)
         {
             printf(" %c", 'C');
         }
-        else if (finalStudentGrades[i] >= 60 && finalStudentGrades[i] < 70)
+        else if (FINAL_STUDENT_GRADES[i] >= 60 && FINAL_STUDENT_GRADES[i] < 70)
         {
             printf(" %c", 'D');
         }
-        else if (finalStudentGrades[i] < 60)
+        else if (FINAL_STUDENT_GRADES[i] < 60)
         {
             printf(" %c", 'F');
         }
     }
 }
 
+//calculates class average
 double calculateClassAverage(double finalStudentGrades[], int students)
 {
     double classAverage = 0;
