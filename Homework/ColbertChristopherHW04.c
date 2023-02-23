@@ -119,7 +119,7 @@ void printFinalGrades(const double FINAL_STUDENT_GRADES[])
         puts("");
         printf("Student %llu: ", i + 1);
         printf("%.2lf", FINAL_STUDENT_GRADES[i]);
-        if (FINAL_STUDENT_GRADES[i] >= 90 && FINAL_STUDENT_GRADES[i] <= 105)
+        if (FINAL_STUDENT_GRADES[i] >= 90)
         {
             printf(" %c", 'A');
         }
