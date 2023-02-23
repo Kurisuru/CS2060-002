@@ -5,7 +5,7 @@
 #define GRADE_CATEGORIES 5
 #define CATEGORIES "1. Learning Activity 2. Homework 3. Project 4. Midterm 5. Final "
 const double GRADE_CATEGORY_WEIGHT[] = { 0.1, 0.3, 0.3, 0.15, .15 };
-#define GRADE_MAX 100
+#define GRADE_MAX 105
 #define GRADE_MIN 0
 
 void enterGrades(int grades[][GRADE_CATEGORIES], size_t pupils, size_t exams);
@@ -56,7 +56,7 @@ void enterGrades(int grades[][GRADE_CATEGORIES],size_t pupils, size_t exams)
     }
 }
 
-//validate that grade entered is an integer number between 0 and 100
+//validate that grade entered is an integer number between 0 and 105 (inclusive
 int getValidGrade()
 {
     int grade = 0;
@@ -68,7 +68,7 @@ int getValidGrade()
         scanReturn = scanf("%d", &grade);
         if (scanReturn == 1)
         {
-            if (grade > GRADE_MIN && grade < GRADE_MAX)
+            if (grade >= GRADE_MIN && grade <= GRADE_MAX)
             {
                 isValid = true;
             }
@@ -102,7 +102,7 @@ void calculateGrades(double finalStudentGrades[], int grades[][GRADE_CATEGORIES]
         double finalGrade = 0;
         //calculate weighted category grade for student by multiplying the category grades and the weight and then add it to the final grade
         for (size_t cols = 0; cols < GRADE_CATEGORIES; cols++) {
-            finalGrade = finalGrade + grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
+            finalGrade += grades[rows][cols] * GRADE_CATEGORY_WEIGHT[cols];
         }
         //save final Grade to student
         finalStudentGrades[rows] = finalGrade;
@@ -119,7 +119,7 @@ void printFinalGrades(const double FINAL_STUDENT_GRADES[])
         puts("");
         printf("Student %llu: ", i + 1);
         printf("%.2lf", FINAL_STUDENT_GRADES[i]);
-        if (FINAL_STUDENT_GRADES[i] >= 90 && FINAL_STUDENT_GRADES[i] < 100)
+        if (FINAL_STUDENT_GRADES[i] >= 90 && FINAL_STUDENT_GRADES[i] <= 105)
         {
             printf(" %c", 'A');
         }
