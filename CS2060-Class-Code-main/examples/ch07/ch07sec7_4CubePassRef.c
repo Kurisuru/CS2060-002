@@ -25,6 +25,7 @@ int main(void) {
 } // main
 
 
+//passes by value, changing the value of number in this function only affects the code inside this function
 int cubePass1 (int number) 
 {
 	int cube = 0;
@@ -38,6 +39,8 @@ int cubePass1 (int number)
 	return cube;
 } 
 
+//passes by reference, changing the value of numberPtr changes the value inside this function and of the value
+//thats passed to this function.
 int cubePass2 (int * numberPtr) 
 {
 	int cube = 0;
