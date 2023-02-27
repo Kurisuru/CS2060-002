@@ -14,6 +14,7 @@ int main ()
 	int calcHouseNum1 = 0;
 	int calcHouseNum2 = 0;
 	int *houseNumPtr = &houseNum;
+	int* pointerHouseNumPtr = houseNumPtr;
 	//int stored at adress of houseNum
 	printf("houseNum %d\n", houseNum);
 	//address of houseNum
@@ -34,7 +35,7 @@ int main ()
 	printf("2 * (*houseNumPtr) is %d\n\n", calcHouseNum2);
 	//the & and the * of a pointer can be switch an still display the address of the pointer
 	printf("\n&*houseNumPtr = %p"
-		"\n*&houseNumPtr = %p\n", &*houseNumPtr, *&houseNumPtr);
+		"\n*&houseNumPtr = %p\n", &*pointerHouseNumPtr, *&houseNumPtr);
 			
 	return 0;
 }
