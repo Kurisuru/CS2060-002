@@ -20,7 +20,7 @@ typedef struct organization
 void setUpOrg(Organization* orgPtr);
 void donate(Organization* orgPtr);
 void generateUrl(Organization* orgPtr);
-void displayInfo(Organization* orgPtr);
+void displayInfo(const Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 
 int main(void)
@@ -32,8 +32,10 @@ int main(void)
 
 void setUpOrg(Organization* orgPtr)
 {
+	char inputStr[SIZE];
+
 	puts("Enter fundraising  organization name.");
-	//fgets();
+	//fgets(orgPtr->orgName, SIZE, stdin);
 
 	puts("Enter fundraiser  purpose.");
 
@@ -96,3 +98,4 @@ bool validatePassword(const char password[])
 	return isValid;
 }
 
+//fgets
