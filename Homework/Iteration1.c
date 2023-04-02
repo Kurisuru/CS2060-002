@@ -82,8 +82,8 @@ void donate(Organization* orgPtr)
 
 void generateUrl(char *email[], const char* orgName[])
 {
-	/**email = "https:donate.com/";
-	char* bufferPtr;
+	*email = "https:donate.com/";
+	/*char* bufferPtr;
 
 	bufferPtr = strchr(*orgName, ' ');
 
@@ -95,7 +95,7 @@ void generateUrl(char *email[], const char* orgName[])
 	char* orgNameWithDashes[SIZE];
 	strncpy(*orgNameWithDashes, *orgName, sizeof(orgNameWithDashes));
 
-	char* tokenPtr = strtok(orgName, " ");
+	char* tokenPtr = strtok(*orgNameWithDashes, " ");
 
 	//strtok
 }
