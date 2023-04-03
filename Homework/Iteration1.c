@@ -20,9 +20,10 @@ typedef struct organization
 	double goalAmount;
 }Organization;
 
+char fgetsNoNewLine(char* str, int size, FILE* stream);
 void setUpOrg(Organization* orgPtr);
 void donate(Organization* orgPtr);
-void generateUrl(char email[], const char orgName[]);
+void generateUrl(char url[], const char orgName[]);
 void displayInfo(const Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 
@@ -38,14 +39,14 @@ void setUpOrg(Organization* orgPtr)
 	char inputStr[SIZE];
 	char* endPtr = inputStr;
 
-	/*puts("Enter fundraising  organization name.");
-	fgets(orgPtr->orgName, SIZE, stdin);
+	puts("Enter fundraising  organization name.");
+	fgetsNoNewLine(orgPtr->orgName, SIZE, stdin);
 
 	puts("Enter fundraiser  purpose.");
-	fgets(orgPtr->purpose, SIZE, stdin);
+	fgetsNoNewLine(orgPtr->purpose, SIZE, stdin);
 
 	puts("Enter first and last name.");
-	fgets(orgPtr->name, SIZE, stdin);*/
+	fgetsNoNewLine(orgPtr->name, SIZE, stdin);
 
 	do
 	{
@@ -55,12 +56,12 @@ void setUpOrg(Organization* orgPtr)
 	} while (!(orgPtr->goalAmount>0));
 	 
 	puts("Enter email address.");
-	fgets(orgPtr->email, SIZE, stdin);
+	fgetsNoNewLine(orgPtr->email, SIZE, stdin);
 
 	puts("Enter password.");
-	fgets(orgPtr->password, SIZE, stdin);
+	fgetsNoNewLine(orgPtr->password, SIZE, stdin);
 
-	generateUrl(&(orgPtr->url), &(orgPtr->orgName));
+	generateUrl(orgPtr->url, orgPtr->orgName);
 	orgPtr->totalDonationAmount = 0;
 	orgPtr->totalDonors = 0;
 	orgPtr->totalProcessingAmount = 0;
@@ -71,9 +72,14 @@ void setUpOrg(Organization* orgPtr)
 
 char fgetsNoNewLine(char *str, int size, FILE *stream)
 {
+
+	char* newlinePtr;
 	if (fgets(str, size, stream) != NULL)
 	{
-
+		if ((newlinePtr = strchr(str, '\n')) != NULL)
+		{
+			*newlinePtr = '\0';
+		}
 	}
 }
 
@@ -82,24 +88,26 @@ void donate(Organization* orgPtr)
 
 }
 
-void generateUrl(char email[], const char orgName[])
+void generateUrl(char url[], const char orgName[])
 {
-	*email = "https:donate.com/";
-	/*char* bufferPtr;
+	strcpy(url, "https:donate.com/");
+	puts(url);
 
-	bufferPtr = strchr(*orgName, ' ');
-
-	while (bufferPtr != NULL)
-	{
-		*bufferPtr = '-';
-		bufferPtr = strchr(bufferPtr, ' ');
-	}*/
 	char* orgNameWithDashes[SIZE];
-	strncpy(*orgNameWithDashes, *orgName, sizeof(orgNameWithDashes));
+	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
+	puts(orgNameWithDashes);
 
-	char* tokenPtr = strtok(*orgNameWithDashes, " ");
+	char* tokenPtr = strtok(orgNameWithDashes, " ");
+	strcat(url, "-");
+	strcat(url, tokenPtr);
 
-	email;
+	while (tokenPtr != NULL)
+	{
+		tokenPtr = strtok(NULL, " ");
+		strcat(url, "-");
+		strcat(url, tokenPtr);
+	}
+
 
 	//strtok
 }
