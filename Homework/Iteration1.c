@@ -97,19 +97,16 @@ void generateUrl(char url[], const char orgName[])
 	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
 	puts(orgNameWithDashes);
 
-	char* tokenPtr = strtok(orgNameWithDashes, " ");
-	strcat(url, "-");
-	strcat(url, tokenPtr);
+	char* tokenPtr = strtok(&(*orgNameWithDashes), " ");
 
 	while (tokenPtr != NULL)
 	{
+		strcat(url, tokenPtr);
 		tokenPtr = strtok(NULL, " ");
 		strcat(url, "-");
-		strcat(url, tokenPtr);
 	}
+	
 
-
-	//strtok
 }
 
 void displayInfo(const Organization* orgPtr)
