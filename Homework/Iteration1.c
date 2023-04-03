@@ -22,7 +22,7 @@ typedef struct organization
 
 void setUpOrg(Organization* orgPtr);
 void donate(Organization* orgPtr);
-void generateUrl(char *email[], const char *orgName[]);
+void generateUrl(char email[], const char orgName[]);
 void displayInfo(const Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 
@@ -38,19 +38,21 @@ void setUpOrg(Organization* orgPtr)
 	char inputStr[SIZE];
 	char* endPtr = inputStr;
 
-	puts("Enter fundraising  organization name.");
+	/*puts("Enter fundraising  organization name.");
 	fgets(orgPtr->orgName, SIZE, stdin);
 
 	puts("Enter fundraiser  purpose.");
 	fgets(orgPtr->purpose, SIZE, stdin);
 
 	puts("Enter first and last name.");
-	fgets(orgPtr->name, SIZE, stdin);
+	fgets(orgPtr->name, SIZE, stdin);*/
 
+	do
+	{
 	puts("Enter the goal amount you want to raise.");
-	fgets(inputStr, SIZE, stdin);
-	orgPtr->goalAmount = strtod(inputStr, &endPtr);
-	//needs validation
+		fgets(inputStr, SIZE, stdin);
+		orgPtr->goalAmount = strtod(inputStr, &endPtr);
+	} while (!(orgPtr->goalAmount>0));
 	 
 	puts("Enter email address.");
 	fgets(orgPtr->email, SIZE, stdin);
@@ -80,7 +82,7 @@ void donate(Organization* orgPtr)
 
 }
 
-void generateUrl(char *email[], const char* orgName[])
+void generateUrl(char email[], const char orgName[])
 {
 	*email = "https:donate.com/";
 	/*char* bufferPtr;
@@ -96,6 +98,8 @@ void generateUrl(char *email[], const char* orgName[])
 	strncpy(*orgNameWithDashes, *orgName, sizeof(orgNameWithDashes));
 
 	char* tokenPtr = strtok(*orgNameWithDashes, " ");
+
+	email;
 
 	//strtok
 }
