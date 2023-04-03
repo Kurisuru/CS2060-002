@@ -22,9 +22,9 @@ typedef struct organization
 
 char *fgetsNoNewLine(char* str, int size, FILE* stream);
 void setUpOrg(Organization* orgPtr);
-void donate(Organization* orgPtr);
 void generateUrl(char url[SIZE], const char orgName[SIZE]);
 void displayInfo(const Organization* orgPtr);
+bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 
 int main(void)
@@ -87,9 +87,13 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 	return returnVal;
 }
 
-void donate(Organization* orgPtr)
+bool donate(Organization* orgPtr)
 {
+	bool admin = false;
+	while (!admin)
+	{
 
+	}
 }
 
 void generateUrl(char url[SIZE], const char orgName[SIZE])
@@ -120,7 +124,18 @@ void displayInfo(const Organization* orgPtr)
 bool adminSummary(Organization* orgPtr)
 {
 	bool pass = false;
+	int attempts = 2;
+	int emailAttempts = 0;
+	int passAttempts = 0;
+	char* emailAttempt[SIZE];
+	for (int i = 0; (i < attempts)&&pass == false; i++)
+	{
+		while (!(emailAttempts < attempts))
+		{
 
+			emailAttempts++;
+		}
+	}
 	return pass;
 }
 
