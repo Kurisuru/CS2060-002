@@ -90,17 +90,19 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 bool donate(Organization* orgPtr)
 {
 	bool admin = false;
+	char* donateNum[SIZE] =;
 	while (!admin)
 	{
-
+		fgetsNoNewLine()
 	}
+	return admin;
 }
 
 void generateUrl(char url[SIZE], const char orgName[SIZE])
 {
 	strcpy(url, "https:donate.com/");
 
-	char* orgNameWithDashes[SIZE];
+	char* orgNameWithDashes;
 	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
 
 	char* tokenPtr = strtok(orgNameWithDashes, " ");
@@ -128,11 +130,11 @@ bool adminSummary(Organization* orgPtr)
 	int emailAttempts = 0;
 	int passAttempts = 0;
 	char* emailAttempt[SIZE];
-	for (int i = 0; (i < attempts)&&pass == false; i++)
+	for (unsigned int i = 0; (i < attempts)&&pass == false; i++)
 	{
-		while (!(emailAttempts < attempts))
+		while (!(emailAttempts < attempts) && (strcmp(orgPtr->email, emailAttempt) != 0))
 		{
-
+			fgetsNoNewLine(&emailAttempt, SIZE, stdin);
 			emailAttempts++;
 		}
 	}
