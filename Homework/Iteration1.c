@@ -20,10 +20,10 @@ typedef struct organization
 	double goalAmount;
 }Organization;
 
-char fgetsNoNewLine(char* str, int size, FILE* stream);
+char *fgetsNoNewLine(char* str, int size, FILE* stream);
 void setUpOrg(Organization* orgPtr);
 void donate(Organization* orgPtr);
-void generateUrl(char url[], const char orgName[]);
+void generateUrl(char url[SIZE], const char orgName[SIZE]);
 void displayInfo(const Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 
@@ -70,17 +70,21 @@ void setUpOrg(Organization* orgPtr)
 
 }
 
-char fgetsNoNewLine(char *str, int size, FILE *stream)
+char *fgetsNoNewLine(char *str, int size, FILE *stream)
 {
-
+	char* returnVal = NULL;
 	char* newlinePtr;
 	if (fgets(str, size, stream) != NULL)
 	{
 		if ((newlinePtr = strchr(str, '\n')) != NULL)
 		{
 			*newlinePtr = '\0';
+
 		}
+		returnVal = str;
 	}
+	
+	return returnVal;
 }
 
 void donate(Organization* orgPtr)
@@ -88,16 +92,14 @@ void donate(Organization* orgPtr)
 
 }
 
-void generateUrl(char url[], const char orgName[])
+void generateUrl(char url[SIZE], const char orgName[SIZE])
 {
 	strcpy(url, "https:donate.com/");
-	puts(url);
 
 	char* orgNameWithDashes[SIZE];
 	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
-	puts(orgNameWithDashes);
 
-	char* tokenPtr = strtok(&(*orgNameWithDashes), " ");
+	char* tokenPtr = strtok(orgNameWithDashes, " ");
 
 	while (tokenPtr != NULL)
 	{
@@ -106,7 +108,7 @@ void generateUrl(char url[], const char orgName[])
 		strcat(url, "-");
 	}
 	
-
+	strcat(url, "?form=popup#");
 }
 
 void displayInfo(const Organization* orgPtr)
