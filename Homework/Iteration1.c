@@ -116,6 +116,8 @@ bool donate(Organization* orgPtr)
 			donateAmount = strtod(donateNum, &endPtr);
 		} 
 		orgPtr->totalDonationAmount += donateAmount;
+		orgPtr->totalDonors++;
+		orgPtr->totalProcessingAmount += (donateAmount * 0.029);
 		
 
 	}
@@ -155,7 +157,7 @@ bool adminSummary(Organization* orgPtr)
 	int passAttempts = 0;
 	char attempt[SIZE];
 
-
+		//gets email from user, checks to see if it equals 
 		do
 		{
 			puts("enter admin email.");
@@ -163,11 +165,10 @@ bool adminSummary(Organization* orgPtr)
 			emailAttempts++;
 			if (strcmp(orgPtr->email, attempt) == 0)
 			{
-				puts("passed");
+				//puts("passed");
 			}
 			else
 			{
-				puts("failed");
 			}
 		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
 		if (strcmp(orgPtr->email, attempt) == 0)
@@ -180,11 +181,13 @@ bool adminSummary(Organization* orgPtr)
 				if (strcmp(orgPtr->password, attempt) == 0)
 				{
 					pass = true;
-					puts("passed");
+					printf("Organization: %s\n total donations: %d\n", orgPtr->orgName, orgPtr->totalDonors);
+					printf("Total amount donated: %.2lf\n Total processing fees: %.2lf", orgPtr->totalDonationAmount, orgPtr->totalProcessingAmount);
+					
 				}
 				else
 				{
-					puts("failed");
+					//puts("failed");
 				}
 			} while ((passAttempts < attempts) && (strcmp(orgPtr->password, attempt) != 0));
 		}
