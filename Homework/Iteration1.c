@@ -31,7 +31,7 @@ int main(void)
 {
 	Organization org1;
 	setUpOrg(&org1);
-	adminSummary(&org1);
+	donate(&org1);
 	return 0;
 }
 
@@ -94,7 +94,17 @@ bool donate(Organization* orgPtr)
 	char donateNum[SIZE];
 	while (!admin)
 	{
+
+		puts(orgPtr->url);
+		puts("MAKE A DIFFERENCE BY YOUR DONATION");
+		printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
+
 		fgetsNoNewLine(donateNum, SIZE, stdin);
+		if ((strcmp(donateNum, "q") == 0)|| (strcmp(donateNum, "Q") == 0))
+		{
+			admin = adminSummary(orgPtr);
+		}
+
 	}
 	return admin;
 }
