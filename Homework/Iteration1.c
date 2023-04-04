@@ -31,6 +31,7 @@ int main(void)
 {
 	Organization org1;
 	setUpOrg(&org1);
+	adminSummary(&org1);
 	return 0;
 }
 
@@ -82,6 +83,7 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 
 		}
 		returnVal = str;
+		puts(returnVal);
 	}
 	
 	return returnVal;
@@ -90,7 +92,7 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 bool donate(Organization* orgPtr)
 {
 	bool admin = false;
-	char* donateNum[SIZE];
+	char donateNum[SIZE];
 	while (!admin)
 	{
 		fgetsNoNewLine(donateNum, SIZE, stdin);
@@ -102,8 +104,8 @@ void generateUrl(char url[SIZE], const char orgName[SIZE])
 {
 	strcpy(url, "https:donate.com/");
 
-	char* orgNameWithDashes;
-	strcpy(orgNameWithDashes, orgName);
+	char orgNameWithDashes[SIZE] = {""};
+	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
 
 	char* tokenPtr = strtok(orgNameWithDashes, " ");
 
@@ -129,15 +131,26 @@ bool adminSummary(Organization* orgPtr)
 	int attempts = 2;
 	int emailAttempts = 0;
 	int passAttempts = 0;
-	char* emailAttempt[SIZE];
-	for (unsigned int i = 0; (i < attempts)&&pass == false; i++)
-	{
-		while (!(emailAttempts < attempts) && (strcmp(orgPtr->email, emailAttempt) != 0))
+	char emailAttempt[SIZE];
+
+
+		do
 		{
-			fgetsNoNewLine(&emailAttempt, SIZE, stdin);
+			fgetsNoNewLine(emailAttempt, SIZE, stdin);
 			emailAttempts++;
+			if (strcmp(orgPtr->email, emailAttempt) == 0)
+			{
+				puts("passed");
+			}
+			else
+			{
+				puts("failed");
+			}
+		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, emailAttempt) != 0));
+		if (strcmp(orgPtr->email, emailAttempt) == 0)
+		{
+			passAttempts++;
 		}
-	}
 	return pass;
 }
 
