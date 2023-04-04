@@ -110,12 +110,12 @@ bool donate(Organization* orgPtr)
 		}
 		else
 		{
-
-			do
+			donateAmount = strtod(donateNum, &endPtr);
+			while ((!(donateAmount > 0)))
 			{
 				fgets(donateNum, SIZE, stdin);
 				donateAmount = strtod(donateNum, &endPtr);
-			} while ((!(donateAmount > 0)));
+			} 
 		}
 
 	}
@@ -186,7 +186,7 @@ bool adminSummary(Organization* orgPtr)
 				{
 					puts("failed");
 				}
-			} while ((passAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
+			} while ((passAttempts < attempts) && (strcmp(orgPtr->password, attempt) != 0));
 		}
 	return pass;
 }
