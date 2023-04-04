@@ -83,7 +83,6 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 
 		}
 		returnVal = str;
-		puts(returnVal);
 	}
 	
 	return returnVal;
@@ -121,7 +120,7 @@ void generateUrl(char url[SIZE], const char orgName[SIZE])
 
 void displayInfo(const Organization* orgPtr)
 {
-	printf("Thank you %s. The url to raise funds for %s is %s.", 
+	printf("Thank you %s. The url to raise funds for %s is %s.\n", 
 		orgPtr->name, orgPtr->orgName, orgPtr->url);
 }
 
@@ -131,14 +130,15 @@ bool adminSummary(Organization* orgPtr)
 	int attempts = 2;
 	int emailAttempts = 0;
 	int passAttempts = 0;
-	char emailAttempt[SIZE];
+	char attempt[SIZE];
 
 
 		do
 		{
-			fgetsNoNewLine(emailAttempt, SIZE, stdin);
+			puts("enter admin email.");
+			fgetsNoNewLine(attempt, SIZE, stdin);
 			emailAttempts++;
-			if (strcmp(orgPtr->email, emailAttempt) == 0)
+			if (strcmp(orgPtr->email, attempt) == 0)
 			{
 				puts("passed");
 			}
@@ -146,10 +146,24 @@ bool adminSummary(Organization* orgPtr)
 			{
 				puts("failed");
 			}
-		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, emailAttempt) != 0));
-		if (strcmp(orgPtr->email, emailAttempt) == 0)
+		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
+		if (strcmp(orgPtr->email, attempt) == 0)
 		{
-			passAttempts++;
+			do
+			{
+				puts("enter admin password.");
+				fgetsNoNewLine(attempt, SIZE, stdin);
+				passAttempts++;
+				if (strcmp(orgPtr->password, attempt) == 0)
+				{
+					pass = true;
+					puts("passed");
+				}
+				else
+				{
+					puts("failed");
+				}
+			} while ((passAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
 		}
 	return pass;
 }
