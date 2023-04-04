@@ -2,12 +2,13 @@
 // Creating a sequential file
 #include <stdio.h>
 
+
 int main(void)
 { 
    FILE *cfPtr; // cfPtr = clients.txt file pointer   
 
    // fopen opens file. Exit program if unable to create file 
-   if ((cfPtr = fopen("C:\\CS2060Files\\clients.txt", "w")) == NULL) {
+   if ((cfPtr = fopen("C:\\CS2060Files\\clients.txt", "a")) == NULL) {
       puts("File could not be opened");
    } 
    else { 
