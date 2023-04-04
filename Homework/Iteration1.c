@@ -90,10 +90,10 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 bool donate(Organization* orgPtr)
 {
 	bool admin = false;
-	char* donateNum[SIZE] =;
+	char* donateNum[SIZE];
 	while (!admin)
 	{
-		fgetsNoNewLine()
+		fgetsNoNewLine(donateNum, SIZE, stdin);
 	}
 	return admin;
 }
@@ -103,7 +103,7 @@ void generateUrl(char url[SIZE], const char orgName[SIZE])
 	strcpy(url, "https:donate.com/");
 
 	char* orgNameWithDashes;
-	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
+	strcpy(orgNameWithDashes, orgName);
 
 	char* tokenPtr = strtok(orgNameWithDashes, " ");
 
