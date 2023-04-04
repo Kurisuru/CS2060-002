@@ -92,17 +92,30 @@ bool donate(Organization* orgPtr)
 {
 	bool admin = false;
 	char donateNum[SIZE];
+	char* endPtr;
+	double donateAmount = 0;
+
+	puts(orgPtr->url);
+	puts("MAKE A DIFFERENCE BY YOUR DONATION");
+	printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
+
 	while (!admin)
 	{
 
-		puts(orgPtr->url);
-		puts("MAKE A DIFFERENCE BY YOUR DONATION");
-		printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
-
+		puts("Enter the amount you want to donate.");
 		fgetsNoNewLine(donateNum, SIZE, stdin);
 		if ((strcmp(donateNum, "q") == 0)|| (strcmp(donateNum, "Q") == 0))
 		{
 			admin = adminSummary(orgPtr);
+		}
+		else
+		{
+
+			do
+			{
+				fgets(donateNum, SIZE, stdin);
+				donateAmount = strtod(donateNum, &endPtr);
+			} while ((!(donateAmount > 0)));
 		}
 
 	}
