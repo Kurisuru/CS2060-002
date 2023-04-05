@@ -249,10 +249,6 @@ bool adminSummary(Organization* orgPtr)
 			puts("enter admin email.");
 			fgetsNoNewLine(attempt, SIZE, stdin);
 			emailAttempts++;
-			if (strcmp(orgPtr->email, attempt) == 0)
-			{
-				//puts("passed");
-			}
 		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
 		if (strcmp(orgPtr->email, attempt) == 0)
 		{
