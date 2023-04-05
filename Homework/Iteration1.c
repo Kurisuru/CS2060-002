@@ -25,7 +25,7 @@ char *fgetsNoNewLine(char* str, int size, FILE* stream);
 void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[SIZE], const char orgName[SIZE]);
 void displayInfo(const Organization* orgPtr);
-bool donate(Organization* orgPtr);
+void donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
 bool responseValidation(char* response);
@@ -38,6 +38,7 @@ int main(void)
 	return 0;
 }
 
+//sets up an organization with an org name, purpose, name, goal amount, admin email and password, url, and initializes totals for donations
 void setUpOrg(Organization* orgPtr)
 {
 	char inputStr[SIZE];
@@ -84,6 +85,8 @@ void setUpOrg(Organization* orgPtr)
 
 }
 
+//if response is lower or upper case y or n, return true
+//else return false
 bool responseValidation(char* response)
 {
 	bool isValid = false;
@@ -100,6 +103,8 @@ bool responseValidation(char* response)
 	return isValid;
 }
 
+//gets input from a stream and stores it in str.
+//removes the new line character from the end of the string
 char *fgetsNoNewLine(char *str, int size, FILE *stream)
 {
 	char* returnVal = NULL;
@@ -117,7 +122,9 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 	return returnVal;
 }
 
-bool donate(Organization* orgPtr)
+//displays organization information and asks user for a donation amount, once a valid donation amount is enetered, collect name of donator and zipcode
+//loop until q or Q are entered, and then the correct email and password are entered.
+void donate(Organization* orgPtr)
 {
 	bool admin = false;
 	char donateNum[SIZE];
@@ -197,9 +204,9 @@ bool donate(Organization* orgPtr)
 			}
 		}
 	}
-	return admin;
 }
 
+//generates a url for the donation organization based on the organization name. the url displays as "https:donate.com/[organization-name]?form=popup#"
 void generateUrl(char url[SIZE], const char orgName[SIZE])
 {
 	strcpy(url, "https:donate.com/");
@@ -219,12 +226,15 @@ void generateUrl(char url[SIZE], const char orgName[SIZE])
 	strcat(url, "?form=popup#");
 }
 
+//displays org name, name of org owner, and url
 void displayInfo(const Organization* orgPtr)
 {
 	printf("Thank you %s. The url to raise funds for %s is %s.\n", 
 		orgPtr->name, orgPtr->orgName, orgPtr->url);
 }
 
+//if user enters correct email and password, display org name, and total donors, donation amounts, and processing fees
+//return true only if correct email and password are entered
 bool adminSummary(Organization* orgPtr)
 {
 	bool pass = false;
@@ -258,15 +268,12 @@ bool adminSummary(Organization* orgPtr)
 					printf("Total amount donated: %.2lf\n Total processing fees: %.2lf", orgPtr->totalDonationAmount, orgPtr->totalProcessingAmount);
 					
 				}
-				else
-				{
-					//puts("failed");
-				}
 			} while ((passAttempts < attempts) && (strcmp(orgPtr->password, attempt) != 0));
 		}
 	return pass;
 }
 
+//return true if zipcode is 5 digits long
 bool validateZipCode(int zipCode)
 {
 	bool isValid = false;
