@@ -27,6 +27,7 @@ void displayInfo(const Organization* orgPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
+bool emailValidation(char* response);
 
 int main(void)
 {
@@ -39,6 +40,7 @@ int main(void)
 void setUpOrg(Organization* orgPtr)
 {
 	char inputStr[SIZE];
+	char emailResponse[SIZE];
 	char* endPtr = inputStr;
 
 	puts("Enter fundraising  organization name.");
@@ -57,8 +59,17 @@ void setUpOrg(Organization* orgPtr)
 		orgPtr->goalAmount = strtod(inputStr, &endPtr);
 	} while (!(orgPtr->goalAmount>0));
 	 
-	puts("Enter email address.");
-	fgetsNoNewLine(orgPtr->email, SIZE, stdin);
+	do
+	{
+		puts("Enter email address.");
+		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
+		do
+		{
+			printf("%s - Is this email correct? enter Y/y or N/n", orgPtr->email);
+			fgetsNoNewLine(emailResponse, SIZE, stdin);
+		} while (!emailValidation(emailResponse));
+	} while (!(strcmp(emailResponse, "Y") == 0) && !(strcmp(emailResponse, "y") == 0));
+	
 
 	puts("Enter password.");
 	fgetsNoNewLine(orgPtr->password, SIZE, stdin);
@@ -70,6 +81,22 @@ void setUpOrg(Organization* orgPtr)
 
 	displayInfo(orgPtr);
 
+}
+
+bool emailValidation(char* response)
+{
+	bool isValid = false;
+
+	if ((strcmp(response, "Y") == 0) || (strcmp(response, "y") == 0))
+	{
+		isValid = true;
+	}
+	if ((strcmp(response, "N") == 0) || (strcmp(response, "n") == 0))
+	{
+		isValid = true;
+	}
+
+	return isValid;
 }
 
 char *fgetsNoNewLine(char *str, int size, FILE *stream)
@@ -102,9 +129,9 @@ bool donate(Organization* orgPtr)
 
 	while (!admin)
 	{
-
-		puts(orgPtr->url);
-		puts("\nMAKE A DIFFERENCE BY YOUR DONATION");
+		
+		printf("\n\n%s", orgPtr->url);
+		puts("MAKE A DIFFERENCE BY YOUR DONATION");
 		printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
 		printf("We have currently raised %.2lf\n", orgPtr->totalDonationAmount);
 		if (orgPtr->totalDonationAmount >= orgPtr->goalAmount)
@@ -143,6 +170,7 @@ bool donate(Organization* orgPtr)
 				fgetsNoNewLine(zipCodeString, SIZE, stdin);
 				zipCode = strtod(zipCodeString, &endPtr);
 			} while (!validateZipCode(zipCode));
+			printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
 		}
 	}
 	return admin;
@@ -226,13 +254,6 @@ bool validateZipCode(int zipCode)
 		isValid = true;
 	}
 
-	/*while (strlen(zipCodeString) != 5 && zipCode == 0)
-	{
-		fgetsNoNewLine(zipCodeString, SIZE, stdin);
-		printf("%llu", strlen(zipCodeString));
-		zipCode = strtod(zipCodeString, &endPtr);
-		printf("zipcode: %d\n", zipCode);
-	}*/
 	return isValid;
 }
 
