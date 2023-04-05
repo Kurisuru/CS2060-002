@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define SIZE 80
 
@@ -27,7 +28,7 @@ void displayInfo(const Organization* orgPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
-bool emailValidation(char* response);
+bool responseValidation(char* response);
 
 int main(void)
 {
@@ -65,9 +66,9 @@ void setUpOrg(Organization* orgPtr)
 		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
 		do
 		{
-			printf("%s - Is this email correct? enter Y/y or N/n", orgPtr->email);
+			puts("Is this email correct? (y)es or (n)o");
 			fgetsNoNewLine(emailResponse, SIZE, stdin);
-		} while (!emailValidation(emailResponse));
+		} while (!responseValidation(emailResponse));
 	} while (!(strcmp(emailResponse, "Y") == 0) && !(strcmp(emailResponse, "y") == 0));
 	
 
@@ -83,7 +84,7 @@ void setUpOrg(Organization* orgPtr)
 
 }
 
-bool emailValidation(char* response)
+bool responseValidation(char* response)
 {
 	bool isValid = false;
 
@@ -122,9 +123,13 @@ bool donate(Organization* orgPtr)
 	char donateNum[SIZE];
 	char donaterName[SIZE];
 	char zipCodeString[SIZE];
+	char inputStr[SIZE];
 	int zipCode = 0;
 	char* endPtr;
 	double donateAmount = 0;
+	time_t rawtime;
+	struct tm* info;
+	info = localtime(&rawtime);
 
 
 	while (!admin)
@@ -171,6 +176,16 @@ bool donate(Organization* orgPtr)
 				zipCode = strtod(zipCodeString, &endPtr);
 			} while (!validateZipCode(zipCode));
 			printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
+			do
+			{
+				puts("Do you want a reciept? (y)es or (n)o");
+				fgetsNoNewLine(inputStr, SIZE, stdin);
+			} while (!responseValidation(inputStr));
+			if (strcmp(inputStr, "Y") == 0 || strcmp(inputStr, "y") == 0)
+			{
+				printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
+				printf("%d/%d/%d - ", info->tm_mon, info->tm_mday, info->tm_year+1900);
+			}
 		}
 	}
 	return admin;
