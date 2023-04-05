@@ -26,6 +26,7 @@ void generateUrl(char url[SIZE], const char orgName[SIZE]);
 void displayInfo(const Organization* orgPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
+bool validateZipCode(int zipCode);
 
 int main(void)
 {
@@ -92,34 +93,57 @@ bool donate(Organization* orgPtr)
 {
 	bool admin = false;
 	char donateNum[SIZE];
+	char donaterName[SIZE];
+	char zipCodeString[SIZE];
+	int zipCode = 0;
 	char* endPtr;
 	double donateAmount = 0;
 
-	puts(orgPtr->url);
-	puts("MAKE A DIFFERENCE BY YOUR DONATION");
-	printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
-	printf("We have currently raised %lf\n", orgPtr->totalDonationAmount);
 
 	while (!admin)
 	{
 
-		puts("Enter the amount you want to donate.");
+		puts(orgPtr->url);
+		puts("\nMAKE A DIFFERENCE BY YOUR DONATION");
+		printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
+		printf("We have currently raised %.2lf\n", orgPtr->totalDonationAmount);
+		if (orgPtr->totalDonationAmount >= orgPtr->goalAmount)
+		{
+			puts("We have reached our goal but can still use the donations.");
+		}
+		else
+		{
+			printf("We are %.2lf towards our goal of %.2lf\n", ((orgPtr->totalDonationAmount / orgPtr->goalAmount) * 100), orgPtr->goalAmount);
+		}
+
+
 		donateAmount = 0;
 		while ((!(donateAmount > 0)) && !admin)
 		{
+			puts("Enter the amount you want to donate.");
 			fgetsNoNewLine(donateNum, SIZE, stdin);
-			if ((strcmp(donateNum, "q") == 0)|| (strcmp(donateNum, "Q") == 0))
+			if ((strcmp(donateNum, "q") == 0) || (strcmp(donateNum, "Q") == 0))
 			{
 				admin = adminSummary(orgPtr);
 			}
-			
-			donateAmount = strtod(donateNum, &endPtr);
-		} 
-		orgPtr->totalDonationAmount += donateAmount;
-		orgPtr->totalDonors++;
-		orgPtr->totalProcessingAmount += (donateAmount * 0.029);
-		
 
+			donateAmount = strtod(donateNum, &endPtr);
+		}
+		
+		if (!admin)
+		{
+			orgPtr->totalDonationAmount += donateAmount;
+			orgPtr->totalDonors++;
+			orgPtr->totalProcessingAmount += (donateAmount * 0.029);
+			puts("Please enter your first and last name.");
+			fgetsNoNewLine(donaterName, SIZE, stdin);
+			do
+			{
+				puts("Please enter your zip code.");
+				fgetsNoNewLine(zipCodeString, SIZE, stdin);
+				zipCode = strtod(zipCodeString, &endPtr);
+			} while (!validateZipCode(zipCode));
+		}
 	}
 	return admin;
 }
@@ -167,9 +191,6 @@ bool adminSummary(Organization* orgPtr)
 			{
 				//puts("passed");
 			}
-			else
-			{
-			}
 		} while ((emailAttempts < attempts) && (strcmp(orgPtr->email, attempt) != 0));
 		if (strcmp(orgPtr->email, attempt) == 0)
 		{
@@ -197,13 +218,22 @@ bool adminSummary(Organization* orgPtr)
 bool validateZipCode(int zipCode)
 {
 	bool isValid = false;
+	char zipCodeString[SIZE];
+	char* endPtr;
 
+	if (zipCode >= 10000 && zipCode <= 99999)
+	{
+		isValid = true;
+	}
+
+	/*while (strlen(zipCodeString) != 5 && zipCode == 0)
+	{
+		fgetsNoNewLine(zipCodeString, SIZE, stdin);
+		printf("%llu", strlen(zipCodeString));
+		zipCode = strtod(zipCodeString, &endPtr);
+		printf("zipcode: %d\n", zipCode);
+	}*/
 	return isValid;
-}
-
-void validateDonationAmount(double *donateAmountPtr)
-{
-	
 }
 
 bool validateEmail()
