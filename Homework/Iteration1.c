@@ -6,6 +6,7 @@
 #include <time.h>
 
 #define SIZE 80
+#define FOLDER_PATH
 
 typedef struct organization 
 {
@@ -19,28 +20,47 @@ typedef struct organization
 	double totalDonationAmount;
 	double totalProcessingAmount;
 	double goalAmount;
+	struct organization *nextOrgPtr;
 }Organization;
 
 char *fgetsNoNewLine(char* str, int size, FILE* stream);
 void setUpOrg(Organization* orgPtr);
-void generateUrl(char url[SIZE], const char orgName[SIZE]);
+void generateUrl(char url[], const char orgName[]);
 void displayInfo(const Organization* orgPtr);
-void donate(Organization* orgPtr);
+bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
 bool responseValidation(char* response);
 
 int main(void)
 {
+	Organization* headPtr = NULL;
+	
+
+
+
+
 	Organization org1;
 	setUpOrg(&org1);
-	donate(&org1);
+	bool admin = false;
+	do {
+		admin = donate(&org1);
+	} while (!admin);
 	return 0;
+}
+
+void insertOrg(Organization** orgPtr) {
+	Organization* newOrgPtr = malloc(sizeof(Organization));
+	if (newOrgPtr != NULL) {
+		setUpOrg(newOrgPtr);
+		newOrgPtr->nextOrgPtr = NULL;
+	}
 }
 
 //sets up an organization with an org name, purpose, name, goal amount, admin email and password, url, and initializes totals for donations
 void setUpOrg(Organization* orgPtr)
 {
+	
 	char inputStr[SIZE];
 	char emailResponse[SIZE];
 	char* endPtr = inputStr;
@@ -122,9 +142,17 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 	return returnVal;
 }
 
+bool promptDonateAmount() {
+
+}
+
+bool checkStringMatch(char strToCheckWith[]) {
+
+}
+
 //displays organization information and asks user for a donation amount, once a valid donation amount is enetered, collect name of donator and zipcode
 //loop until q or Q are entered, and then the correct email and password are entered.
-void donate(Organization* orgPtr)
+bool donate(Organization* orgPtr)
 {
 	bool admin = false;
 	char donateNum[SIZE];
@@ -161,7 +189,7 @@ void donate(Organization* orgPtr)
 		{
 			puts("Enter the amount you want to donate.");
 			fgetsNoNewLine(donateNum, SIZE, stdin);
-			if ((strcmp(donateNum, "q") == 0) || (strcmp(donateNum, "Q") == 0))
+			if (donateNum[0] == 'q' || donateNum[0] == 'Q')
 			{
 				admin = adminSummary(orgPtr);
 			}
@@ -204,10 +232,15 @@ void donate(Organization* orgPtr)
 			}
 		}
 	}
+	return admin;
+}
+
+bool getValidNum(char strNum[], double *num) {
+
 }
 
 //generates a url for the donation organization based on the organization name. the url displays as "https:donate.com/[organization-name]?form=popup#"
-void generateUrl(char url[SIZE], const char orgName[SIZE])
+void generateUrl(char url[], const char orgName[])
 {
 	strcpy(url, "https:donate.com/");
 
