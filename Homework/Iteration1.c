@@ -41,7 +41,7 @@ int main(void)
 
 
 
-	Organization org1;
+	Organization org1; 
 	setUpOrg(&org1);
 	bool admin = false;
 	do {
