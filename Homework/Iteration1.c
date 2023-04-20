@@ -35,7 +35,8 @@ bool responseValidation(char* response);
 int main(void)
 {
 	Organization* headPtr = NULL;
-	
+	//priority 1 is linked lists
+	//priority 2 is is files
 
 
 
@@ -49,11 +50,21 @@ int main(void)
 	return 0;
 }
 
+//finds organization with name user selects
+Organization selectOrg(char userString[], Organization **headPtr) {
+	Organization *temp = *headPtr;
+
+	return *temp;
+}
+
 void insertOrg(Organization** orgPtr) {
 	Organization* newOrgPtr = malloc(sizeof(Organization));
 	if (newOrgPtr != NULL) {
 		setUpOrg(newOrgPtr);
 		newOrgPtr->nextOrgPtr = NULL;
+	}
+	while (newOrgPtr != NULL && strcmp((*orgPtr)->orgName, newOrgPtr->orgName) <0) {
+
 	}
 }
 
