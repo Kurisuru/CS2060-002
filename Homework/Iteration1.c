@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #define SIZE 80
 #define FOLDER_PATH
@@ -24,8 +25,10 @@ typedef struct organization
 }Organization;
 
 char *fgetsNoNewLine(char* str, int size, FILE* stream);
+char validateYesNo();
 void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[], const char orgName[]);
+void insertOrg(Organization** headPtr);
 void displayInfo(const Organization* orgPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
@@ -37,7 +40,12 @@ int main(void)
 	Organization* headPtr = NULL;
 	//priority 1 is linked lists
 	//priority 2 is is files
-
+	char yesOrNo;
+	do
+	{
+		insertOrg(&headPtr);
+		puts("Do you want to create another organization?");
+	} while (yesOrNo == 'y');
 
 
 
@@ -133,6 +141,22 @@ bool responseValidation(char* response)
 
 	return isValid;
 }
+
+char validateYesNo() {
+	char validYesNo;
+
+	do {
+		puts("Please enter (y)es or (n)o:");
+		validYesNo = getchar();
+		while (getchar() != '\n');
+
+		validYesNo = tolower(validYesNo);
+
+	} while (validYesNo != 'y' && validYesNo != 'n');
+
+	return  validYesNo;
+} //End validateYesNo
+
 
 //gets input from a stream and stores it in str.
 //removes the new line character from the end of the string
