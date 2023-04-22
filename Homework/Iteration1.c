@@ -34,12 +34,10 @@ void printOrgs(Organization* headPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
-bool responseValidation(char* response);
 
 int main(void)
 {
 	Organization* headPtr = NULL;
-	//priority 1 is linked lists
 	//priority 2 is is files
 	char yesOrNo = ' ';
 	printOrgs(headPtr);
@@ -51,19 +49,11 @@ int main(void)
 		yesOrNo = validateYesNo();
 	} while (yesOrNo == 'y');
 
-
-
-	Organization org1; 
-	setUpOrg(&org1);
-	bool admin = false;
-	do {
-		admin = donate(&org1);
-	} while (!admin);
 	return 0;
 }
 
 //finds organization with name user selects
-Organization selectOrg(char userString[], Organization **headPtr) {
+Organization selectOrg(Organization **headPtr) {
 	Organization *temp = *headPtr;
 
 	return *temp;
@@ -100,12 +90,9 @@ void insertOrg(Organization** headPtr) {
 		Organization* previousPtr = NULL;
 		Organization* currentPtr = *headPtr;
 
-		while (currentPtr != NULL) {
-			if (currentPtr != NULL && strcmp(newOrgPtr->orgName, currentPtr->orgName) < 0) 
-			{
+		while (currentPtr != NULL && !(strcmp(newOrgPtr->orgName, currentPtr->orgName) < 0)) {
 			previousPtr = currentPtr;
 			currentPtr = currentPtr->nextOrgPtr;
-			}
 		}//while
 
 		if (previousPtr == NULL)
@@ -130,7 +117,6 @@ void setUpOrg(Organization* orgPtr)
 {
 	
 	char inputStr[SIZE];
-	char emailResponse[SIZE];
 	char* endPtr = inputStr;
 
 	puts("Enter fundraising  organization name.");
@@ -149,16 +135,15 @@ void setUpOrg(Organization* orgPtr)
 		orgPtr->goalAmount = strtod(inputStr, &endPtr);
 	} while (!(orgPtr->goalAmount>0));
 	 
+	char yesOrNo = ' ';
 	do
 	{
 		puts("Enter email address.");
 		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
-		do
-		{
-			puts("Is this email correct? (y)es or (n)o");
-			fgetsNoNewLine(emailResponse, SIZE, stdin);
-		} while (!responseValidation(emailResponse));
-	} while (!(strcmp(emailResponse, "Y") == 0) && !(strcmp(emailResponse, "y") == 0));
+		
+		puts("Is this email correct?");
+		yesOrNo = validateYesNo();
+	} while (!(yesOrNo == 'y'));
 	
 
 	puts("Enter password.");
@@ -171,24 +156,6 @@ void setUpOrg(Organization* orgPtr)
 
 	displayInfo(orgPtr);
 
-}
-
-//if response is lower or upper case y or n, return true
-//else return false
-bool responseValidation(char* response)
-{
-	bool isValid = false;
-
-	if ((strcmp(response, "Y") == 0) || (strcmp(response, "y") == 0))
-	{
-		isValid = true;
-	}
-	if ((strcmp(response, "N") == 0) || (strcmp(response, "n") == 0))
-	{
-		isValid = true;
-	}
-
-	return isValid;
 }
 
 //prompts for a (y)es or a (n)o, returns either y or n (lowercase)
