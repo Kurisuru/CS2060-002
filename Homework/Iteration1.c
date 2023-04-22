@@ -100,9 +100,12 @@ void insertOrg(Organization** headPtr) {
 		Organization* previousPtr = NULL;
 		Organization* currentPtr = *headPtr;
 
-		while (newOrgPtr != NULL && strcmp(currentPtr->orgName, newOrgPtr->orgName)<0) {
+		while (currentPtr != NULL) {
+			if (currentPtr != NULL && strcmp(newOrgPtr->orgName, currentPtr->orgName) < 0) 
+			{
 			previousPtr = currentPtr;
 			currentPtr = currentPtr->nextOrgPtr;
+			}
 		}//while
 
 		if (previousPtr == NULL)
