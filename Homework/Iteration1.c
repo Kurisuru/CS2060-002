@@ -30,6 +30,7 @@ void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[], const char orgName[]);
 void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
+void printOrgs(Organization* headPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
@@ -41,9 +42,11 @@ int main(void)
 	//priority 1 is linked lists
 	//priority 2 is is files
 	char yesOrNo = ' ';
+	printOrgs(headPtr);
 	do
 	{
 		insertOrg(&headPtr);
+		printOrgs(headPtr);
 		puts("Do you want to create another organization?");
 		yesOrNo = validateYesNo();
 	} while (yesOrNo == 'y');
@@ -66,23 +69,57 @@ Organization selectOrg(char userString[], Organization **headPtr) {
 	return *temp;
 }
 
-void insertOrg(Organization** orgPtr) {
+//prints the list of organization names currently in the linked list
+void printOrgs(Organization* headPtr)
+{
+	if (headPtr != NULL)
+	{
+		puts("List of Organizations: ");
+		Organization* currentPtr = headPtr;
+
+		while (currentPtr != NULL)
+		{
+			puts(currentPtr->orgName);
+			currentPtr = currentPtr->nextOrgPtr;
+		}
+	}
+	else
+	{
+		puts("List is empty");
+	}
+}
+
+//inserts new organization into linked list sorted alphabetically
+void insertOrg(Organization** headPtr) {
 	Organization* newOrgPtr = malloc(sizeof(Organization));
-	bool inserted = false;
+	
 	if (newOrgPtr != NULL) {
 		setUpOrg(newOrgPtr);
 		newOrgPtr->nextOrgPtr = NULL;
 
+		Organization* previousPtr = NULL;
+		Organization* currentPtr = *headPtr;
+
+		while (newOrgPtr != NULL && strcmp(currentPtr->orgName, newOrgPtr->orgName)<0) {
+			previousPtr = currentPtr;
+			currentPtr = currentPtr->nextOrgPtr;
+		}//while
+
+		if (previousPtr == NULL)
+		{
+			*headPtr = newOrgPtr;
+		}
+		else
+		{
+			previousPtr->nextOrgPtr = newOrgPtr;
+		}
+		newOrgPtr->nextOrgPtr = currentPtr;
+
 	}
-	while (newOrgPtr != NULL && !inserted) {
-		if (orgPtr == NULL)
-		{
-			orgPtr = newOrgPtr;
-		}
-		else if()
-		{
-		}
-	}//while
+	else
+	{
+		puts("No memory to create new organization");
+	}
 }
 
 //sets up an organization with an org name, purpose, name, goal amount, admin email and password, url, and initializes totals for donations
@@ -151,6 +188,7 @@ bool responseValidation(char* response)
 	return isValid;
 }
 
+//prompts for a (y)es or a (n)o, returns either y or n (lowercase)
 char validateYesNo() {
 	char validYesNo;
 
