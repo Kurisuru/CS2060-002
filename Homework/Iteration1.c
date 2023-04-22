@@ -28,7 +28,7 @@ char *fgetsNoNewLine(char* str, int size, FILE* stream);
 char validateYesNo();
 void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[], const char orgName[]);
-void insertOrg(Organization** headPtr);
+void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
 bool donate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
@@ -40,11 +40,12 @@ int main(void)
 	Organization* headPtr = NULL;
 	//priority 1 is linked lists
 	//priority 2 is is files
-	char yesOrNo;
+	char yesOrNo = ' ';
 	do
 	{
 		insertOrg(&headPtr);
 		puts("Do you want to create another organization?");
+		yesOrNo = validateYesNo();
 	} while (yesOrNo == 'y');
 
 
@@ -67,13 +68,21 @@ Organization selectOrg(char userString[], Organization **headPtr) {
 
 void insertOrg(Organization** orgPtr) {
 	Organization* newOrgPtr = malloc(sizeof(Organization));
+	bool inserted = false;
 	if (newOrgPtr != NULL) {
 		setUpOrg(newOrgPtr);
 		newOrgPtr->nextOrgPtr = NULL;
-	}
-	while (newOrgPtr != NULL && strcmp((*orgPtr)->orgName, newOrgPtr->orgName) <0) {
 
 	}
+	while (newOrgPtr != NULL && !inserted) {
+		if (orgPtr == NULL)
+		{
+			orgPtr = newOrgPtr;
+		}
+		else if()
+		{
+		}
+	}//while
 }
 
 //sets up an organization with an org name, purpose, name, goal amount, admin email and password, url, and initializes totals for donations
