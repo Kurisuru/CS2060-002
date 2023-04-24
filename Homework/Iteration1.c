@@ -43,10 +43,25 @@ int main(void)
 	printOrgs(headPtr);
 	do
 	{
+
 		insertOrg(&headPtr);
 		printOrgs(headPtr);
 		puts("Do you want to create another organization?");
 		yesOrNo = validateYesNo();
+	} while (yesOrNo == 'y');
+
+	char orgToDonate[SIZE];
+	yesOrNo = ' ';
+	do
+	{
+		puts("would you like to donate to an organization?");
+		yesOrNo = validateYesNo();
+		if (yesOrNo == 'y')
+		{
+			printOrgs(headPtr);
+			puts("What organization would you like to donate to?");
+			fgetsNoNewLine(orgToDonate, sizeof(orgToDonate), stdin);
+		}
 	} while (yesOrNo == 'y');
 
 	return 0;
