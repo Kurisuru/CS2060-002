@@ -191,7 +191,7 @@ void setUpOrg(Organization* orgPtr)
 		{
 		puts("Enter email address.");
 		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
-		validEmail = validateEmail(orgPtr->email);
+		validEmail = true;//validateEmail(orgPtr->email);
 		} while (!validEmail);
 		
 		puts("Is this email correct?");
