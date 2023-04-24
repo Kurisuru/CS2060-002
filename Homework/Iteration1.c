@@ -7,7 +7,7 @@
 #include <ctype.h>
 
 #define SIZE 80
-#define FOLDER_PATH
+#define FOLDER_PATH C:\\CS2060Files
 
 typedef struct organization 
 {
@@ -31,23 +31,25 @@ void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[], const char orgName[]);
 void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
-void printOrgs(Organization* headPtr);
+void printOrgs(Organization* headPtr, bool details);
 bool donate(Organization* orgPtr);
 bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
+bool validatePassword(const char password[]);
+bool validateEmail(const char email[]);
 
 int main(void)
 {
 	Organization* headPtr = NULL;
 	//priority 2 is is files
 	char yesOrNo = ' ';
-	printOrgs(headPtr);
+	printOrgs(headPtr, false);
 	do
 	{
 
 		insertOrg(&headPtr);
-		printOrgs(headPtr);
+		printOrgs(headPtr, false);
 		puts("Do you want to create another organization?");
 		yesOrNo = validateYesNo();
 	} while (yesOrNo == 'y');
@@ -57,6 +59,7 @@ int main(void)
 	do
 	{
 		Organization *temp = NULL;
+		printOrgs(headPtr, true);
 		puts("What organization would you like to donate to?");
 		fgetsNoNewLine(orgToDonate, sizeof(orgToDonate), stdin);
 		temp = selectOrg(&headPtr, orgToDonate);
@@ -93,17 +96,28 @@ Organization* selectOrg(Organization **headPtr, char orgToDonate[]) {
 }
 
 //prints the list of organization names currently in the linked list
-void printOrgs(Organization* headPtr)
+void printOrgs(Organization* headPtr, bool details)
 {
 	if (headPtr != NULL)
 	{
 		puts("List of Organizations: ");
 		Organization* currentPtr = headPtr;
-
+		if (details)
+		{
+		printf("Organization\t\tGoal Amount\tCurrent Donations");
 		while (currentPtr != NULL)
 		{
-			puts(currentPtr->orgName);
+			printf("%s\t\t%lf\t%lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
 			currentPtr = currentPtr->nextOrgPtr;
+		}
+		}
+		else
+		{
+			while (currentPtr != NULL)
+			{
+				puts(currentPtr->orgName);
+				currentPtr = currentPtr->nextOrgPtr;
+			}
 		}
 	}
 	else
@@ -111,6 +125,7 @@ void printOrgs(Organization* headPtr)
 		puts("List is empty");
 	}
 }
+
 
 //inserts new organization into linked list sorted alphabetically
 void insertOrg(Organization** headPtr) {
@@ -169,18 +184,28 @@ void setUpOrg(Organization* orgPtr)
 	} while (!(orgPtr->goalAmount>0));
 	 
 	char yesOrNo = ' ';
+	bool validEmail = false;
 	do
 	{
+		do
+		{
 		puts("Enter email address.");
 		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
+		validEmail = validateEmail(orgPtr->email);
+		} while (!validEmail);
 		
 		puts("Is this email correct?");
 		yesOrNo = validateYesNo();
 	} while (!(yesOrNo == 'y'));
 	
+	bool validPass = false;
+	do
+	{
 
 	puts("Enter password.");
 	fgetsNoNewLine(orgPtr->password, SIZE, stdin);
+	validPass = validatePassword(orgPtr->password);
+	} while (!validPass);
 
 	generateUrl(orgPtr->url, orgPtr->orgName);
 	orgPtr->totalDonationAmount = 0;
@@ -356,8 +381,16 @@ bool newDonate(Organization* orgPtr)
 		donateAmount = strtod(donateNum, &endPtr);
 	}
 
-	/*if (!quit)
+	if (!quit)
 	{
+		char donaterName[SIZE];
+		char zipCodeString[SIZE];
+		char inputStr[SIZE];
+		int zipCode = 0;
+		time_t rawtime;
+		struct tm* info;
+		time(&rawtime);
+
 		orgPtr->totalDonationAmount += donateAmount;
 		orgPtr->totalDonors++;
 		orgPtr->totalProcessingAmount += (donateAmount * 0.029);
@@ -367,7 +400,7 @@ bool newDonate(Organization* orgPtr)
 		{
 			puts("Please enter your zip code.");
 			fgetsNoNewLine(zipCodeString, SIZE, stdin);
-			zipCode = atoi(zipCodeString);
+			zipCode = strtol(zipCodeString, &endPtr, 10);
 		} while (!validateZipCode(zipCode));
 		printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
 		do
@@ -389,7 +422,7 @@ bool newDonate(Organization* orgPtr)
 				printf("%d:%d AM", info->tm_hour, info->tm_min);
 			}
 		}
-	}*/
+	}
 
 	return quit;
 
@@ -477,16 +510,44 @@ bool validateZipCode(int zipCode)
 	return isValid;
 }
 
-bool validateEmail()
+bool validateEmail(const char email[])
 {
 	bool isValid = false;
 
 	return isValid;
 }
 
+//returns true if password has at least 1 capital, lowercase, and number, and is at least 7 characters long
 bool validatePassword(const char password[])
 {
 	bool isValid = false;
+	bool number = false;
+	bool capital = false;
+	bool lower = false;
+	
+	if ((strlen(password)) >= 7)
+	{
+		for (int i = 0; i < strlen(password); i++)
+		{
+			if (password[i]>= 'A' && password[i] <= 'Z')
+			{
+				capital = true;
+			}
+			if (password[i] >= '0' && password[i] <= '9')
+			{
+				number = true;
+			}
+			if (password[i] >= 'a' && password[i] <= 'z')
+			{
+				lower = true;
+			}
+
+		}
+		if (number && capital && lower)
+		{
+			isValid = true;
+		}
+	}
 
 	return isValid;
 }
