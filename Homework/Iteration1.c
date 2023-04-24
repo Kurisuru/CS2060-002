@@ -24,6 +24,7 @@ typedef struct organization
 	struct organization *nextOrgPtr;
 }Organization;
 
+Organization* selectOrg(Organization** headPtr, char orgToDonate[]);
 char *fgetsNoNewLine(char* str, int size, FILE* stream);
 char validateYesNo();
 void setUpOrg(Organization* orgPtr);
@@ -32,6 +33,7 @@ void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
 void printOrgs(Organization* headPtr);
 bool donate(Organization* orgPtr);
+bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
 
@@ -51,27 +53,43 @@ int main(void)
 	} while (yesOrNo == 'y');
 
 	char orgToDonate[SIZE];
-	yesOrNo = ' ';
+	bool quit = false;
 	do
 	{
-		puts("would you like to donate to an organization?");
-		yesOrNo = validateYesNo();
-		if (yesOrNo == 'y')
-		{
-			printOrgs(headPtr);
-			puts("What organization would you like to donate to?");
-			fgetsNoNewLine(orgToDonate, sizeof(orgToDonate), stdin);
+		Organization *temp = NULL;
+		puts("What organization would you like to donate to?");
+		fgetsNoNewLine(orgToDonate, sizeof(orgToDonate), stdin);
+		temp = selectOrg(&headPtr, orgToDonate);
+		if(temp != NULL)
+		{ 
+			quit = newDonate(temp);
 		}
-	} while (yesOrNo == 'y');
+		
+	} while (!quit);
 
 	return 0;
 }
 
 //finds organization with name user selects
-Organization selectOrg(Organization **headPtr) {
-	Organization *temp = *headPtr;
+Organization* selectOrg(Organization **headPtr, char orgToDonate[]) {
+	Organization* temp = *headPtr;
+	if (temp != NULL)
+	{
+		Organization* currentPtr = *headPtr;
 
-	return *temp;
+		while (currentPtr != NULL && (strcmp(currentPtr->orgName,orgToDonate) != 0)) {
+			currentPtr = currentPtr->nextOrgPtr;
+		}//while
+		if (strcmp(currentPtr->orgName, orgToDonate) == 0)
+		{
+			temp = currentPtr;
+		}
+	}
+	else
+	{
+		puts("The list is empty");
+	}
+	return temp;
 }
 
 //prints the list of organization names currently in the linked list
@@ -210,11 +228,15 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 }
 
 bool promptDonateAmount() {
+	bool isValid = false;
 
+	return isValid;
 }
 
 bool checkStringMatch(char strToCheckWith[]) {
+	bool isValid = false;
 
+	return isValid;
 }
 
 //displays organization information and asks user for a donation amount, once a valid donation amount is enetered, collect name of donator and zipcode
@@ -282,7 +304,7 @@ bool donate(Organization* orgPtr)
 			{
 				puts("Do you want a reciept? (y)es or (n)o");
 				fgetsNoNewLine(inputStr, SIZE, stdin);
-			} while (!responseValidation(inputStr));
+			} while (true);
 			if (strcmp(inputStr, "Y") == 0 || strcmp(inputStr, "y") == 0)
 			{
 				info = localtime(&rawtime);
@@ -302,8 +324,46 @@ bool donate(Organization* orgPtr)
 	return admin;
 }
 
-bool getValidNum(char strNum[], double *num) {
+bool newDonate(Organization* orgPtr)
+{
+	bool quit = false;
+	double donateAmount = 0;
+	char donateNum[SIZE];
+	char* endPtr;
 
+	printf("\n\n%s", orgPtr->url);
+	puts("MAKE A DIFFERENCE BY YOUR DONATION");
+	printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
+	printf("We have currently raised %.2lf\n", orgPtr->totalDonationAmount);
+	if (orgPtr->totalDonationAmount >= orgPtr->goalAmount)
+	{
+		puts("We have reached our goal but can still use the donations.");
+	}
+	else
+	{
+		printf("We are %.2lf towards our goal of %.2lf\n", ((orgPtr->totalDonationAmount / orgPtr->goalAmount) * 100), orgPtr->goalAmount);
+	}
+
+	while (!(donateAmount > 0))
+	{
+		puts("Enter the amount you want to donate.");
+		fgetsNoNewLine(donateNum, SIZE, stdin);
+		if (donateNum[0] == 'q' || donateNum[0] == 'Q')
+		{
+			quit = adminSummary(orgPtr);
+		}
+
+		donateAmount = strtod(donateNum, &endPtr);
+	}
+
+	return quit;
+
+}
+
+bool getValidNum(char strNum[], double *num) {
+	bool isValid = false;
+
+	return isValid;
 }
 
 //generates a url for the donation organization based on the organization name. the url displays as "https:donate.com/[organization-name]?form=popup#"
