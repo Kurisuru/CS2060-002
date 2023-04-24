@@ -83,7 +83,7 @@ Organization* selectOrg(Organization **headPtr, char orgToDonate[]) {
 		while (currentPtr != NULL && (strcmp(currentPtr->orgName,orgToDonate) != 0)) {
 			currentPtr = currentPtr->nextOrgPtr;
 		}//while
-		if (strcmp(currentPtr->orgName, orgToDonate) == 0)
+		if (currentPtr != NULL && strcmp(currentPtr->orgName, orgToDonate) == 0)
 		{
 			temp = currentPtr;
 		}
@@ -107,7 +107,7 @@ void printOrgs(Organization* headPtr, bool details)
 		printf("Organization\t\tGoal Amount\tCurrent Donations\n");
 		while (currentPtr != NULL)
 		{
-			printf("%-15s\t\t%lf\t%lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
+			printf("%-15s\t\t%.2lf\t%.2lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
 			currentPtr = currentPtr->nextOrgPtr;
 		}
 		}
