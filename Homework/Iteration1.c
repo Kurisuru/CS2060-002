@@ -344,17 +344,52 @@ bool newDonate(Organization* orgPtr)
 		printf("We are %.2lf towards our goal of %.2lf\n", ((orgPtr->totalDonationAmount / orgPtr->goalAmount) * 100), orgPtr->goalAmount);
 	}
 
-	while (!(donateAmount > 0))
+	while (!(donateAmount > 0) && !quit)
 	{
 		puts("Enter the amount you want to donate.");
 		fgetsNoNewLine(donateNum, SIZE, stdin);
-		if (donateNum[0] == 'q' || donateNum[0] == 'Q')
+		if (tolower(donateNum[0]) == 'q')
 		{
 			quit = adminSummary(orgPtr);
 		}
 
 		donateAmount = strtod(donateNum, &endPtr);
 	}
+
+	/*if (!quit)
+	{
+		orgPtr->totalDonationAmount += donateAmount;
+		orgPtr->totalDonors++;
+		orgPtr->totalProcessingAmount += (donateAmount * 0.029);
+		puts("Please enter your first and last name.");
+		fgetsNoNewLine(donaterName, SIZE, stdin);
+		do
+		{
+			puts("Please enter your zip code.");
+			fgetsNoNewLine(zipCodeString, SIZE, stdin);
+			zipCode = atoi(zipCodeString);
+		} while (!validateZipCode(zipCode));
+		printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
+		do
+		{
+			puts("Do you want a reciept? (y)es or (n)o");
+			fgetsNoNewLine(inputStr, SIZE, stdin);
+		} while (true);
+		if (strcmp(inputStr, "Y") == 0 || strcmp(inputStr, "y") == 0)
+		{
+			info = localtime(&rawtime);
+			printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
+			printf("%d/%d/%d - ", info->tm_mon + 1, info->tm_mday, info->tm_year + 1900);
+			if ((info->tm_hour) > 12)
+			{
+				printf("%d:%d PM", info->tm_hour - 12, info->tm_min);
+			}
+			else
+			{
+				printf("%d:%d AM", info->tm_hour, info->tm_min);
+			}
+		}
+	}*/
 
 	return quit;
 
