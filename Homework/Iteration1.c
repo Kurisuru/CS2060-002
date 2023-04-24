@@ -104,7 +104,7 @@ void printOrgs(Organization* headPtr, bool details)
 		Organization* currentPtr = headPtr;
 		if (details)
 		{
-		printf("Organization\t\tGoal Amount\tCurrent Donations");
+		printf("Organization\t\tGoal Amount\tCurrent Donations\n");
 		while (currentPtr != NULL)
 		{
 			printf("%s\t\t%lf\t%lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
@@ -390,6 +390,7 @@ bool newDonate(Organization* orgPtr)
 		time_t rawtime;
 		struct tm* info;
 		time(&rawtime);
+		char yesOrNo = ' ';
 
 		orgPtr->totalDonationAmount += donateAmount;
 		orgPtr->totalDonors++;
@@ -406,9 +407,9 @@ bool newDonate(Organization* orgPtr)
 		do
 		{
 			puts("Do you want a reciept? (y)es or (n)o");
-			fgetsNoNewLine(inputStr, SIZE, stdin);
+			yesOrNo = validateYesNo();
 		} while (true);
-		if (strcmp(inputStr, "Y") == 0 || strcmp(inputStr, "y") == 0)
+		if (yesOrNo == 'y')
 		{
 			info = localtime(&rawtime);
 			printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
