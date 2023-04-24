@@ -107,7 +107,7 @@ void printOrgs(Organization* headPtr, bool details)
 		printf("Organization\t\tGoal Amount\tCurrent Donations\n");
 		while (currentPtr != NULL)
 		{
-			printf("%s\t\t%lf\t%lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
+			printf("%-15s\t\t%lf\t%lf\n", currentPtr->orgName, currentPtr->goalAmount, currentPtr->totalDonationAmount);
 			currentPtr = currentPtr->nextOrgPtr;
 		}
 		}
@@ -404,11 +404,10 @@ bool newDonate(Organization* orgPtr)
 			zipCode = strtol(zipCodeString, &endPtr, 10);
 		} while (!validateZipCode(zipCode));
 		printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
-		do
-		{
-			puts("Do you want a reciept? (y)es or (n)o");
-			yesOrNo = validateYesNo();
-		} while (true);
+		puts("Do you want a reciept? (y)es or (n)o");
+		yesOrNo = validateYesNo();
+
+		//change this into seperate function
 		if (yesOrNo == 'y')
 		{
 			info = localtime(&rawtime);
