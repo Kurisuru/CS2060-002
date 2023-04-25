@@ -435,7 +435,7 @@ bool getValidNum(char strNum[], double *num) {
 }
 
 //generates a url for the donation organization based on the organization name. the url displays as "https:donate.com/[organization-name]?form=popup#"
-void generateUrl(char url[], const char orgName[])
+void generateUrl( char url[], const char orgName[])
 {
 	strcpy(url, "https:donate.com/");
 
@@ -448,7 +448,10 @@ void generateUrl(char url[], const char orgName[])
 	{
 		strcat(url, tokenPtr);
 		tokenPtr = strtok(NULL, " ");
+		if (tokenPtr != NULL)
+		{
 		strcat(url, "-");
+		}
 	}
 	
 	strcat(url, "?form=popup#");
@@ -513,17 +516,6 @@ bool validateZipCode(int zipCode)
 bool validateEmail(const char email[])
 {
 	bool isValid = false;
-	char* token;
-	bool hasDomain = false;
-	bool hasExtension = false;
-	bool hasUsername = false;
-
-	token = strtok(email, '@');
-	while (token != NULL)
-	{
-		//if email[0] != token[0] has username
-
-	}
 
 
 	return isValid;
