@@ -7,7 +7,7 @@
 #include <ctype.h>
 
 #define SIZE 80
-#define FOLDER_PATH C:\\CS2060Files
+#define FOLDER_PATH "C:\\CS2060Files\\"
 
 typedef struct organization 
 {
@@ -17,6 +17,7 @@ typedef struct organization
 	char email[SIZE];
 	char password[SIZE];
 	char url[SIZE];
+	char filePath[SIZE];
 	int totalDonors;
 	double totalDonationAmount;
 	double totalProcessingAmount;
@@ -32,6 +33,7 @@ void generateUrl(char url[], const char orgName[]);
 void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
 void printOrgs(Organization* headPtr, bool details);
+void createRecieptFile(char filePath[], const char orgName[]);
 bool donate(Organization* orgPtr);
 bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
@@ -207,6 +209,7 @@ void setUpOrg(Organization* orgPtr)
 	validPass = validatePassword(orgPtr->password);
 	} while (!validPass);
 
+	createRecieptFile(orgPtr->filePath, orgPtr->orgName);
 	generateUrl(orgPtr->url, orgPtr->orgName);
 	orgPtr->totalDonationAmount = 0;
 	orgPtr->totalDonors = 0;
@@ -214,6 +217,58 @@ void setUpOrg(Organization* orgPtr)
 
 	displayInfo(orgPtr);
 
+}
+
+void createRecieptFile(char filePath[] , const char orgName[])
+{
+	char orgNameWithDashes[SIZE] = { "" };
+	strcpy(filePath, FOLDER_PATH);
+
+	strncpy(orgNameWithDashes, orgName, sizeof(orgNameWithDashes));
+
+	char* tokenPtr = strtok(orgNameWithDashes, " ");
+
+	while (tokenPtr != NULL)
+	{
+		strcat(filePath, tokenPtr);
+		tokenPtr = strtok(NULL, " ");
+		if (tokenPtr != NULL)
+		{
+			strcat(filePath, "-");
+		}
+	}
+	strcat(filePath, ".txt");
+
+	FILE* fPtr;
+	fPtr = fopen(filePath, "w");
+	fclose(fPtr);
+}
+
+void updateReciept(char filePath[], double donateAmount, Organization* orgPtr)
+{
+	FILE* fPtr;
+	fPtr = fopen(orgPtr->filePath, "a");
+	time_t rawtime;
+	struct tm* info;
+	time(&rawtime);
+
+	info = localtime(&rawtime);
+	printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
+	fprintf(fPtr, "Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
+	printf("%d/%d/%d - ", info->tm_mon + 1, info->tm_mday, info->tm_year + 1900);
+	fprintf(fPtr, "%d/%d/%d - ", info->tm_mon + 1, info->tm_mday, info->tm_year + 1900);
+	if ((info->tm_hour) > 12)
+	{
+		printf("%d:%d PM", info->tm_hour - 12, info->tm_min);
+		fprintf(fPtr, "%d:%d PM\n\n", info->tm_hour - 12, info->tm_min);
+	}
+	else
+	{
+		printf("%d:%d AM", info->tm_hour, info->tm_min);
+		fprintf(fPtr, "%d:%d AM\n\n", info->tm_hour, info->tm_min);
+	}
+
+	fclose(fPtr);
 }
 
 //prompts for a (y)es or a (n)o, returns either y or n (lowercase)
@@ -356,7 +411,7 @@ bool newDonate(Organization* orgPtr)
 	char donateNum[SIZE];
 	char* endPtr;
 
-	printf("\n\n%s", orgPtr->url);
+	printf("\n\n%s\n", orgPtr->url);
 	puts("MAKE A DIFFERENCE BY YOUR DONATION");
 	printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
 	printf("We have currently raised %.2lf\n", orgPtr->totalDonationAmount);
@@ -385,11 +440,7 @@ bool newDonate(Organization* orgPtr)
 	{
 		char donaterName[SIZE];
 		char zipCodeString[SIZE];
-		char inputStr[SIZE];
 		int zipCode = 0;
-		time_t rawtime;
-		struct tm* info;
-		time(&rawtime);
 		char yesOrNo = ' ';
 
 		orgPtr->totalDonationAmount += donateAmount;
@@ -404,34 +455,18 @@ bool newDonate(Organization* orgPtr)
 			zipCode = strtol(zipCodeString, &endPtr, 10);
 		} while (!validateZipCode(zipCode));
 		printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
-		puts("Do you want a reciept? (y)es or (n)o");
+		puts("Do you want a reciept?");
 		yesOrNo = validateYesNo();
 
 		//change this into seperate function
 		if (yesOrNo == 'y')
 		{
-			info = localtime(&rawtime);
-			printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
-			printf("%d/%d/%d - ", info->tm_mon + 1, info->tm_mday, info->tm_year + 1900);
-			if ((info->tm_hour) > 12)
-			{
-				printf("%d:%d PM", info->tm_hour - 12, info->tm_min);
-			}
-			else
-			{
-				printf("%d:%d AM", info->tm_hour, info->tm_min);
-			}
+			updateReciept(orgPtr->filePath, donateAmount, orgPtr);
 		}
 	}
 
 	return quit;
 
-}
-
-bool getValidNum(char strNum[], double *num) {
-	bool isValid = false;
-
-	return isValid;
 }
 
 //generates a url for the donation organization based on the organization name. the url displays as "https:donate.com/[organization-name]?form=popup#"
@@ -462,6 +497,12 @@ void displayInfo(const Organization* orgPtr)
 {
 	printf("Thank you %s. The url to raise funds for %s is %s.\n", 
 		orgPtr->name, orgPtr->orgName, orgPtr->url);
+}
+
+bool getValidNum(char strNum[], double *num) {
+	bool isValid = false;
+
+	return isValid;
 }
 
 //if user enters correct email and password, display org name, and total donors, donation amounts, and processing fees
