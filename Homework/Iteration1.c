@@ -466,7 +466,7 @@ void displayInfo(const Organization* orgPtr)
 bool adminSummary(Organization* orgPtr)
 {
 	bool pass = false;
-	int attempts = 2;
+	int attempts = 3;
 	int emailAttempts = 0;
 	int passAttempts = 0;
 	char attempt[SIZE];
@@ -513,6 +513,18 @@ bool validateZipCode(int zipCode)
 bool validateEmail(const char email[])
 {
 	bool isValid = false;
+	char* token;
+	bool hasDomain = false;
+	bool hasExtension = false;
+	bool hasUsername = false;
+
+	token = strtok(email, '@');
+	while (token != NULL)
+	{
+		//if email[0] != token[0] has username
+
+	}
+
 
 	return isValid;
 }
