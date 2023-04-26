@@ -457,6 +457,7 @@ bool newDonate(Organization* orgPtr)
 {
 	bool quit = false;
 	double donateAmount = 0;
+	double processingFee = 0.031;
 	char donateNum[SIZE];
 	char* endPtr;
 
@@ -494,7 +495,7 @@ bool newDonate(Organization* orgPtr)
 
 		orgPtr->totalDonationAmount += donateAmount;
 		orgPtr->totalDonors++;
-		orgPtr->totalProcessingAmount += (donateAmount * 0.029);
+		orgPtr->totalProcessingAmount += (donateAmount * processingFee);
 		puts("Please enter your first and last name.");
 		fgetsNoNewLine(donaterName, SIZE, stdin);
 		do
@@ -503,7 +504,8 @@ bool newDonate(Organization* orgPtr)
 			fgetsNoNewLine(zipCodeString, SIZE, stdin);
 			zipCode = strtol(zipCodeString, &endPtr, 10);
 		} while (!validateZipCode(zipCode));
-		printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
+		printf("Thank you for your donation.There is a %lf%% credit card processing fee of %.2lf. % .2lf will be donated.",
+			(processingFee*100), (donateAmount * processingFee), donateAmount);
 		puts("Do you want a reciept?");
 		yesOrNo = validateYesNo();
 
