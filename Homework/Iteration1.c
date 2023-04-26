@@ -35,6 +35,7 @@ void displayInfo(const Organization* orgPtr);
 void printOrgs(Organization* headPtr, bool details);
 void createRecieptFile(char filePath[], const char orgName[]);
 void freeRemainingOrgs(Organization** headPtr);
+void orgSummary(Organization* headPtr);
 bool donate(Organization* orgPtr);
 bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
@@ -72,6 +73,7 @@ int main(void)
 		
 	} while (!quit);
 
+	orgSummary(headPtr);
 	freeRemainingOrgs(&headPtr);
 
 	return 0;
@@ -195,7 +197,8 @@ void setUpOrg(Organization* orgPtr)
 		{
 		puts("Enter email address.");
 		fgetsNoNewLine(orgPtr->email, SIZE, stdin);
-		validEmail = true;//validateEmail(orgPtr->email);
+		//validEmail = true;
+		validEmail = validateEmail(orgPtr->email);
 		} while (!validEmail);
 		
 		puts("Is this email correct?");
@@ -236,6 +239,26 @@ void freeRemainingOrgs(Organization** headPtr)
 
 	*headPtr = NULL;
 }//freeRemainingOrgs
+
+void orgSummary(Organization* headPtr)
+{
+	Organization* currentPtr = headPtr;
+	FILE *fPtr;
+	char fileLocation[SIZE];
+	strcpy(fileLocation, FOLDER_PATH);
+	strcat(fileLocation, "orgs.txt");
+	fPtr = fopen(fileLocation, "w");
+	while (currentPtr != NULL)
+	{
+		fprintf(fPtr, "Organization Name: %s\nTotal Number of Donations: %d", currentPtr->orgName, currentPtr->totalDonors);
+		fprintf(fPtr, "Total Amount Raised: %lf\n", currentPtr->totalDonationAmount);
+		fprintf(fPtr, "Total Credit Card Processing: %lf\n\n", currentPtr->totalProcessingAmount);
+		printf("Organization Name: %s\nTotal Number of Donations: %d", currentPtr->orgName, currentPtr->totalDonors);
+		printf("Total Amount Raised: %lf\n", currentPtr->totalDonationAmount);
+		printf("Total Credit Card Processing: %lf\n\n", currentPtr->totalProcessingAmount);
+	}
+	fclose(fPtr);
+}
 
 int strcmpIgnoreCase(const char* str1, const char* str2)
 {
@@ -595,10 +618,33 @@ bool validateZipCode(int zipCode)
 bool validateEmail(const char email[])
 {
 	bool isValid = false;
+	char emailCopy[SIZE] = { "" };
+	strcpy(emailCopy, email);
 
+	int count = 0;
+	while (email[count] != '@')
+	{
+
+		count++;
+	}
+
+	char* previousPtr = emailCopy;
+	char* tokenPtr = strtok(emailCopy, "@");
+	/*if (tokenPtr != NULL)
+	{
+		previousPtr = tokenPtr;
+		tokenPtr = strtok(NULL, ".");
+		if (tokenPtr != NULL)
+		{
+			if (tokenPtr[1] != '\0')
+			{
+				isValid = true;
+			}
+		}
+	}*/
 
 	return isValid;
-}
+}//validateEmail
 
 //returns true if password has at least 1 capital, lowercase, and number, and is at least 7 characters long
 bool validatePassword(const char password[])
