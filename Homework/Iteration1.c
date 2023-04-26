@@ -349,7 +349,6 @@ char validateYesNo() {
 	return  validYesNo;
 } //End validateYesNo
 
-
 //gets input from a stream and stores it in str.
 //removes the new line character from the end of the string
 char *fgetsNoNewLine(char *str, int size, FILE *stream)
@@ -367,18 +366,6 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 	}
 	
 	return returnVal;
-}
-
-bool promptDonateAmount() {
-	bool isValid = false;
-
-	return isValid;
-}
-
-bool checkStringMatch(char strToCheckWith[]) {
-	bool isValid = false;
-
-	return isValid;
 }
 
 //displays organization information and asks user for a donation amount, once a valid donation amount is enetered, collect name of donator and zipcode
@@ -559,12 +546,6 @@ void displayInfo(const Organization* orgPtr)
 {
 	printf("Thank you %s. The url to raise funds for %s is %s.\n", 
 		orgPtr->name, orgPtr->orgName, orgPtr->url);
-}
-
-bool getValidNum(char strNum[], double *num) {
-	bool isValid = false;
-
-	return isValid;
 }
 
 //if user enters correct email and password, display org name, and total donors, donation amounts, and processing fees
