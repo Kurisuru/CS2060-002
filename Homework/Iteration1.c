@@ -506,7 +506,7 @@ bool newDonate(Organization* orgPtr)
 			fgetsNoNewLine(zipCodeString, SIZE, stdin);
 			zipCode = strtol(zipCodeString, &endPtr, 10);
 		} while (!validateZipCode(zipCode));
-		printf("Thank you for your donation.There is a %lf%% credit card processing fee of %.2lf. % .2lf will be donated.",
+		printf("Thank you for your donation.There is a %.2lf%% credit card processing fee of %.2lf. %.2lf will be donated.",
 			(processingFee*100), (donateAmount * processingFee), donateAmount);
 		puts("Do you want a reciept?");
 		yesOrNo = validateYesNo();
