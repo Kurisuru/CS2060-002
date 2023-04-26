@@ -7,6 +7,7 @@
 #include <ctype.h>
 
 #define SIZE 80
+#define PROCESSING_FEE 0.031
 #define FOLDER_PATH "C:\\CS2060Files\\"
 
 typedef struct organization 
@@ -28,6 +29,7 @@ typedef struct organization
 Organization* selectOrg(Organization** headPtr, char orgToDonate[]);
 char *fgetsNoNewLine(char* str, int size, FILE* stream);
 char validateYesNo();
+int strcmpIgnoreCase(const char* str1, const char* str2);
 void setUpOrg(Organization* orgPtr);
 void generateUrl(char url[], const char orgName[]);
 void insertOrg(Organization** orgPtr);
@@ -250,12 +252,12 @@ void orgSummary(Organization* headPtr)
 	fPtr = fopen(fileLocation, "w");
 	while (currentPtr != NULL)
 	{
-		fprintf(fPtr, "Organization Name: %s\nTotal Number of Donations: %d", currentPtr->orgName, currentPtr->totalDonors);
-		fprintf(fPtr, "Total Amount Raised: %lf\n", currentPtr->totalDonationAmount);
-		fprintf(fPtr, "Total Credit Card Processing: %lf\n\n", currentPtr->totalProcessingAmount);
-		printf("Organization Name: %s\nTotal Number of Donations: %d", currentPtr->orgName, currentPtr->totalDonors);
-		printf("Total Amount Raised: %lf\n", currentPtr->totalDonationAmount);
-		printf("Total Credit Card Processing: %lf\n\n", currentPtr->totalProcessingAmount);
+		fprintf(fPtr, "Organization Name: %s\nTotal Number of Donations: %d\n", currentPtr->orgName, currentPtr->totalDonors);
+		fprintf(fPtr, "Total Amount Raised: $%lf\n", currentPtr->totalDonationAmount);
+		fprintf(fPtr, "Total Credit Card Processing: $%lf\n\n", currentPtr->totalProcessingAmount);
+		printf("Organization Name: %s\nTotal Number of Donations: %d\n", currentPtr->orgName, currentPtr->totalDonors);
+		printf("Total Amount Raised: $%lf\n", currentPtr->totalDonationAmount);
+		printf("Total Credit Card Processing: $%lf\n\n", currentPtr->totalProcessingAmount);
 		currentPtr = currentPtr->nextOrgPtr;
 	}
 	fclose(fPtr);
@@ -457,7 +459,7 @@ bool newDonate(Organization* orgPtr)
 {
 	bool quit = false;
 	double donateAmount = 0;
-	double processingFee = 0.031;
+	double processingFee = PROCESSING_FEE;
 	char donateNum[SIZE];
 	char* endPtr;
 
@@ -604,14 +606,9 @@ bool validateEmail(const char email[])
 	bool isValid = false;
 	char emailCopy[SIZE] = { "" };
 	strcpy(emailCopy, email);
-
-	int extension = 0;
-
-	char* previousPtr = emailCopy;
 	char* tokenPtr = strtok(emailCopy, "@");
 	if (tokenPtr != NULL)
 	{
-		previousPtr = tokenPtr;
 		tokenPtr = strtok(NULL, ".");
 		if (tokenPtr != NULL)
 		{
