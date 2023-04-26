@@ -256,6 +256,7 @@ void orgSummary(Organization* headPtr)
 		printf("Organization Name: %s\nTotal Number of Donations: %d", currentPtr->orgName, currentPtr->totalDonors);
 		printf("Total Amount Raised: %lf\n", currentPtr->totalDonationAmount);
 		printf("Total Credit Card Processing: %lf\n\n", currentPtr->totalProcessingAmount);
+		currentPtr = currentPtr->nextOrgPtr;
 	}
 	fclose(fPtr);
 }
@@ -621,27 +622,19 @@ bool validateEmail(const char email[])
 	char emailCopy[SIZE] = { "" };
 	strcpy(emailCopy, email);
 
-	int count = 0;
-	while (email[count] != '@')
-	{
-
-		count++;
-	}
+	int extension = 0;
 
 	char* previousPtr = emailCopy;
 	char* tokenPtr = strtok(emailCopy, "@");
-	/*if (tokenPtr != NULL)
+	if (tokenPtr != NULL)
 	{
 		previousPtr = tokenPtr;
 		tokenPtr = strtok(NULL, ".");
 		if (tokenPtr != NULL)
 		{
-			if (tokenPtr[1] != '\0')
-			{
-				isValid = true;
-			}
+			isValid = true;
 		}
-	}*/
+	}
 
 	return isValid;
 }//validateEmail
