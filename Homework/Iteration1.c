@@ -34,6 +34,7 @@ void insertOrg(Organization** orgPtr);
 void displayInfo(const Organization* orgPtr);
 void printOrgs(Organization* headPtr, bool details);
 void createRecieptFile(char filePath[], const char orgName[]);
+void freeRemainingOrgs(Organization** headPtr);
 bool donate(Organization* orgPtr);
 bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
@@ -44,7 +45,6 @@ bool validateEmail(const char email[]);
 int main(void)
 {
 	Organization* headPtr = NULL;
-	//priority 2 is is files
 	char yesOrNo = ' ';
 	printOrgs(headPtr, false);
 	do
@@ -72,13 +72,15 @@ int main(void)
 		
 	} while (!quit);
 
+	freeRemainingOrgs(&headPtr);
+
 	return 0;
 }
 
 //finds organization with name user selects
 Organization* selectOrg(Organization **headPtr, char orgToDonate[]) {
-	Organization* temp = *headPtr;
-	if (temp != NULL)
+	Organization* temp = NULL;
+	if (*headPtr != NULL)
 	{
 		Organization* currentPtr = *headPtr;
 
@@ -140,7 +142,7 @@ void insertOrg(Organization** headPtr) {
 		Organization* previousPtr = NULL;
 		Organization* currentPtr = *headPtr;
 
-		while (currentPtr != NULL && !(strcmp(newOrgPtr->orgName, currentPtr->orgName) < 0)) {
+		while (currentPtr != NULL && !(strcmpIgnoreCase(newOrgPtr->orgName, currentPtr->orgName) < 0)) {
 			previousPtr = currentPtr;
 			currentPtr = currentPtr->nextOrgPtr;
 		}//while
@@ -219,6 +221,42 @@ void setUpOrg(Organization* orgPtr)
 
 }
 
+void freeRemainingOrgs(Organization** headPtr)
+{
+	Organization* currentPtr = *headPtr;
+	Organization* nextOrgPtr = NULL;
+
+	//while list has data, delete data and move to next
+	while (currentPtr != NULL)
+	{
+		nextOrgPtr = currentPtr->nextOrgPtr;
+		free(currentPtr);
+		currentPtr = nextOrgPtr;
+	}
+
+	*headPtr = NULL;
+}//freeRemainingOrgs
+
+int strcmpIgnoreCase(const char* str1, const char* str2)
+{
+	char lowerStr1[SIZE];
+	char lowerStr2[SIZE];
+	strcpy(lowerStr1, str1);
+	strcpy(lowerStr2, str2);
+
+	for (int i = 0; i < sizeof(lowerStr1); i++)
+	{
+		lowerStr1[i] = tolower(lowerStr1[i]);
+	}
+
+	for (int i = 0; i < sizeof(lowerStr2); i++)
+	{
+		lowerStr2[i] = tolower(lowerStr2[i]);
+	}
+
+	return strcmp(lowerStr1, lowerStr2);
+}//strcmpIgnoreCase
+
 void createRecieptFile(char filePath[] , const char orgName[])
 {
 	char orgNameWithDashes[SIZE] = { "" };
@@ -259,12 +297,12 @@ void updateReciept(char filePath[], double donateAmount, Organization* orgPtr)
 	fprintf(fPtr, "%d/%d/%d - ", info->tm_mon + 1, info->tm_mday, info->tm_year + 1900);
 	if ((info->tm_hour) > 12)
 	{
-		printf("%d:%d PM", info->tm_hour - 12, info->tm_min);
+		printf("%d:%d PM\n\n", info->tm_hour - 12, info->tm_min);
 		fprintf(fPtr, "%d:%d PM\n\n", info->tm_hour - 12, info->tm_min);
 	}
 	else
 	{
-		printf("%d:%d AM", info->tm_hour, info->tm_min);
+		printf("%d:%d AM\n\n", info->tm_hour, info->tm_min);
 		fprintf(fPtr, "%d:%d AM\n\n", info->tm_hour, info->tm_min);
 	}
 
