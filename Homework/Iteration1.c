@@ -39,7 +39,6 @@ void createRecieptFile(char filePath[], const char orgName[]);
 void freeRemainingOrgs(Organization** headPtr);
 void orgSummary(Organization* headPtr);
 bool donate(Organization* orgPtr);
-bool newDonate(Organization* orgPtr);
 bool adminSummary(Organization* orgPtr);
 bool validateZipCode(int zipCode);
 bool validatePassword(const char password[]);
@@ -70,7 +69,7 @@ int main(void)
 		temp = selectOrg(&headPtr, orgToDonate);
 		if(temp != NULL)
 		{ 
-			quit = newDonate(temp);
+			quit = donate(temp);
 		}
 		
 	} while (!quit);
@@ -133,7 +132,6 @@ void printOrgs(Organization* headPtr, bool details)
 		puts("List is empty");
 	}
 }
-
 
 //inserts new organization into linked list sorted alphabetically
 void insertOrg(Organization** headPtr) {
@@ -226,6 +224,7 @@ void setUpOrg(Organization* orgPtr)
 
 }
 
+//frees memory remaining in linked list
 void freeRemainingOrgs(Organization** headPtr)
 {
 	Organization* currentPtr = *headPtr;
@@ -242,6 +241,7 @@ void freeRemainingOrgs(Organization** headPtr)
 	*headPtr = NULL;
 }//freeRemainingOrgs
 
+//prints (to file and console) a summary of each organization including the org name, and total donors, donation amounts, processing fees
 void orgSummary(Organization* headPtr)
 {
 	Organization* currentPtr = headPtr;
@@ -263,6 +263,7 @@ void orgSummary(Organization* headPtr)
 	fclose(fPtr);
 }
 
+//converts both strings to lowercase, and then compares them using strcmp
 int strcmpIgnoreCase(const char* str1, const char* str2)
 {
 	char lowerStr1[SIZE];
@@ -283,6 +284,7 @@ int strcmpIgnoreCase(const char* str1, const char* str2)
 	return strcmp(lowerStr1, lowerStr2);
 }//strcmpIgnoreCase
 
+//creates a file path for current organization
 void createRecieptFile(char filePath[] , const char orgName[])
 {
 	char orgNameWithDashes[SIZE] = { "" };
@@ -374,89 +376,6 @@ char *fgetsNoNewLine(char *str, int size, FILE *stream)
 //loop until q or Q are entered, and then the correct email and password are entered.
 bool donate(Organization* orgPtr)
 {
-	bool admin = false;
-	char donateNum[SIZE];
-	char donaterName[SIZE];
-	char zipCodeString[SIZE];
-	char inputStr[SIZE];
-	int zipCode = 0;
-	char* endPtr;
-	double donateAmount = 0;
-	time_t rawtime;
-	struct tm* info;
-	time(&rawtime);
-
-
-	while (!admin)
-	{
-		
-		printf("\n\n%s", orgPtr->url);
-		puts("MAKE A DIFFERENCE BY YOUR DONATION");
-		printf("Organization: %s\nPurpose: %s\n", orgPtr->orgName, orgPtr->purpose);
-		printf("We have currently raised %.2lf\n", orgPtr->totalDonationAmount);
-		if (orgPtr->totalDonationAmount >= orgPtr->goalAmount)
-		{
-			puts("We have reached our goal but can still use the donations.");
-		}
-		else
-		{
-			printf("We are %.2lf towards our goal of %.2lf\n", ((orgPtr->totalDonationAmount / orgPtr->goalAmount) * 100), orgPtr->goalAmount);
-		}
-
-
-		donateAmount = 0;
-		while ((!(donateAmount > 0)) && !admin)
-		{
-			puts("Enter the amount you want to donate.");
-			fgetsNoNewLine(donateNum, SIZE, stdin);
-			if (donateNum[0] == 'q' || donateNum[0] == 'Q')
-			{
-				admin = adminSummary(orgPtr);
-			}
-
-			donateAmount = strtod(donateNum, &endPtr);
-		}
-		
-		if (!admin)
-		{
-			orgPtr->totalDonationAmount += donateAmount;
-			orgPtr->totalDonors++;
-			orgPtr->totalProcessingAmount += (donateAmount * 0.029);
-			puts("Please enter your first and last name.");
-			fgetsNoNewLine(donaterName, SIZE, stdin);
-			do
-			{
-				puts("Please enter your zip code.");
-				fgetsNoNewLine(zipCodeString, SIZE, stdin);
-				zipCode = atoi(zipCodeString);
-			} while (!validateZipCode(zipCode));
-			printf("Thank you for your donation.There is a 2.9%% credit card processing fee of %.2lf. % .2lf will be donated.", (donateAmount * 0.029), donateAmount);
-			do
-			{
-				puts("Do you want a reciept? (y)es or (n)o");
-				fgetsNoNewLine(inputStr, SIZE, stdin);
-			} while (true);
-			if (strcmp(inputStr, "Y") == 0 || strcmp(inputStr, "y") == 0)
-			{
-				info = localtime(&rawtime);
-				printf("Organization: %s\nDonation Amount: %.2lf\nDonation Date: ", orgPtr->orgName, donateAmount);
-				printf("%d/%d/%d - ", info->tm_mon+1, info->tm_mday, info->tm_year+1900);
-				if ((info->tm_hour) >12)
-				{
-					printf("%d:%d PM", info->tm_hour-12, info->tm_min);
-				}
-				else
-				{
-					printf("%d:%d AM", info->tm_hour, info->tm_min);
-				}
-			}
-		}
-	}
-	return admin;
-}
-
-bool newDonate(Organization* orgPtr)
-{
 	bool quit = false;
 	double donateAmount = 0;
 	double processingFee = PROCESSING_FEE;
@@ -511,7 +430,6 @@ bool newDonate(Organization* orgPtr)
 		puts("Do you want a reciept?");
 		yesOrNo = validateYesNo();
 
-		//change this into seperate function
 		if (yesOrNo == 'y')
 		{
 			updateReciept(orgPtr->filePath, donateAmount, orgPtr);
@@ -601,6 +519,7 @@ bool validateZipCode(int zipCode)
 	return isValid;
 }
 
+//returns true if email is in form [username]@[domain].[extension]
 bool validateEmail(const char email[])
 {
 	bool isValid = false;
