@@ -12,6 +12,7 @@
 
 typedef struct organization 
 {
+	struct organization *nextOrgPtr;
 	char orgName[SIZE];
 	char purpose[SIZE];
 	char name[SIZE];
@@ -23,7 +24,6 @@ typedef struct organization
 	double totalDonationAmount;
 	double totalProcessingAmount;
 	double goalAmount;
-	struct organization *nextOrgPtr;
 }Organization;
 
 Organization* selectOrg(Organization** headPtr, char orgToDonate[]);
